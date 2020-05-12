@@ -1,0 +1,20 @@
+.register{
+  background: -webkit-linear-gradient(left, #ff8308, #210303);
+  height: 100%;
+  width: 100%;
+  padding: 3%;
+}
+
+.register-left{
+  text-align: center;
+  margin-top: 4%;
+}
+
+.register-left img{
+  
+  margin-bottom: 3%;
+  width: 30%;
+  
+}
+
+

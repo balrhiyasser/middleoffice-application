@@ -1,0 +1,68 @@
+.register{
+  background: -webkit-linear-gradient(left, #ff8308, #210303);
+  height: 100%;
+  width: 100%;
+  padding: 3%;
+}
+.register-left{
+  text-align: center;
+  color: #fff;
+  margin-top: 4%;
+}
+
+.register-right{
+  background: #f8f9fa;
+  border-top-left-radius: 10% 50%;
+  border-bottom-left-radius: 10% 50%;
+}
+.register-left img{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  width: 50%;
+  -webkit-animation: mover 2s infinite  alternate;
+  animation: mover 1s infinite  alternate;
+}
+@-webkit-keyframes mover {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+@keyframes mover {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+.register-left p{
+  font-weight: lighter;
+}
+.register .register-form{
+  padding: 10%;
+}
+.btnRegister{
+  box-shadow: 0 5px 15px 0 rgba(0,0,0,0.26);
+  height:40px;
+  width:calc(100% - 400px);
+  display:block;
+  margin:auto;
+  color: white!important;
+  outline: none;
+  border:none;
+  margin-top: 5%;
+  border: none;
+  border-radius: 1.5rem;
+  justify-content: center;
+  background: #ff8308;
+  
+}
+
+
+.form-group {
+  text-align: center ;
+}
+
+
+.register-heading{
+  text-align: center;
+  font-size: xx-large;
+  margin-top: 0;
+  margin-bottom: 7%;
+  color: #495057;
+}

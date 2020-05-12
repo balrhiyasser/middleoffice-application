@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+}
+
+.custom-btn-link{
+  margin-left: 5px;
+  color: #fff;
+}
+
+.custom-btn-link .glyphicon{
+  color: #fff;
+}
+
+.custom-mat-cell{
+  width: 120px;
+}

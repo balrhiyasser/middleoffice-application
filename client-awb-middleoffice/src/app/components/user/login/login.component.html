@@ -1,0 +1,32 @@
+
+<div class="register">
+  <div class="row">
+      <div class="col-md-3 register-left">
+          <img src="../../../../assets/imgs/logo.png" alt="logo"/>
+          <h3>Welcome</h3>
+          <p>The middle office is the department in a financial services company, investment bank, or hedge fund that manages risk and calculates profits and losses. It is generally in charge of information technology (IT) as well.</p>
+      </div>
+      <div class="col-md-9 register-right">
+                  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                          <div class="register-form">
+                              <div class="col-md-12">
+                                  <form name="form-signin" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                                    <h3 class="display-3 register-heading">LOGIN</h3>
+                                    <div class="alert alert-danger" role="alert" *ngIf="errorMessage">{{errorMessage}}</div>
+                                  <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+                                    <input type="text" class="form-control input-text-custom" id="username" placeholder="Username" name="username" [(ngModel)]="user.username" #username="ngModel" required />
+                                    <div *ngIf="f.submitted && !username.valid" class="help-block">An valid username is required.</div>
+                                  </div>
+                                  <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                                    <input type="password" class="form-control input-text-custom" id="password" placeholder="Password" name="password" [(ngModel)]="user.password" #password="ngModel" required />
+                                    <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required.</div>
+                                  </div>
+                                  <button class="btnRegister" type="submit">Sign In</button>
+                                </form>
+                                  <!--<a [routerLink]="['/register']" class="btn btn-link">Create New Account!</a> -->
+                              </div>
+                            </div>
+                  </div>
+      </div>
+  </div>
+</div>

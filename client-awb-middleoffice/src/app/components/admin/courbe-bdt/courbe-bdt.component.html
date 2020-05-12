@@ -1,0 +1,64 @@
+<div class="page">
+    <div class="jumbotron">
+      <div style="margin-left: 90px;" *ngIf="dataSource">
+        <div class="card">
+          <div class="card-header" style="height: 70px;">
+            <div class="row" >
+              <div class="col col-xs-6" style="margin-top: 10px">
+                <h3 class="panel-title">Courbe des Taux BDT</h3>
+              </div>
+              <form class="form-inline" style="margin-right: 20px;">
+                <div class="form-group mx-sm-3">
+                  <input type="date" class="form-control" name="date" [ngModel]="BirthDate | date:'yyyy-MM-dd'" #date>
+                  <button mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-success" (click)="getcourbeList(date.value)">Générer</button>
+                </div> 
+              </form>
+            </div>  
+          </div>
+          <div class="card-body">
+  
+            <mat-table [dataSource]="dataSource" matSort>
+  
+              <ng-container matColumnDef="dateEcheance">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Date Echeance</mat-header-cell>
+                <mat-cell *matCellDef="let courbe">{{courbe.dateEcheance}}</mat-cell>
+              </ng-container>
+    
+              <ng-container matColumnDef="dateValeur">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Date Valeur</mat-header-cell>
+                <mat-cell *matCellDef="let courbe">{{courbe.dateValeur}}</mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="dateCourbe">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Date Courbe</mat-header-cell>
+                <mat-cell *matCellDef="let courbe">{{courbe.dateCourbe}}</mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="tmp">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>tmp</mat-header-cell>
+                <mat-cell *matCellDef="let courbe">{{courbe.tmp}}</mat-cell>
+              </ng-container>
+    
+              <ng-container matColumnDef="volume">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Volume</mat-header-cell>
+                <mat-cell *matCellDef="let courbe">{{courbe.volume}}</mat-cell>
+              </ng-container>
+    
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  
+            </mat-table>
+  
+            <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+  
+  
+  
+  
+  
+  
+  

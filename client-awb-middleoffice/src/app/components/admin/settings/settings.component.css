@@ -1,0 +1,24 @@
+table {
+  width: 100%;
+}
+
+
+.custom-btn-link{
+  margin-left: 5px;
+  color: #fff;
+}
+
+.custom-btn-link .glyphicon{
+  color: #fff;
+}
+
+.custom-mat-cell{
+  width: 120px;
+}
+
+.jumbotron{
+  background: -webkit-linear-gradient(left, #ff8308, #000) no-repeat center center fixed; 
+  ;
+  margin-bottom: -50px;
+  height: 700px;
+}

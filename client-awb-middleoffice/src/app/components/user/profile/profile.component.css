@@ -1,0 +1,14 @@
+.log-out{
+  cursor: pointer;
+    color: coral!important;
+    font-size: large;
+}
+
+.page{
+  background: -webkit-linear-gradient(left, #ff8308, #210303);
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  
+}
+
