@@ -3,6 +3,7 @@ export class CourbeBDT  {
     dateEcheance: string ;
     dateValeur: string ;
     dateCourbe: string ;
+    maturite: number ;
     tmp: number ;
     volume: number ;
   }

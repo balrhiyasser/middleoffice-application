@@ -3,7 +3,6 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {User} from '../model/user';
-import {Transaction} from '../model/transaction';
 
 let API_URL = "http://localhost:8080/api/user/";
 
@@ -47,13 +46,4 @@ export class UserService {
   }
   
 
-  findAllProducts(): Observable<any> {
-    return this.http.get(API_URL + "products",
-  {headers: {"Content-Type":"application/json; charset=UTF-8"}});
-  }
-
-  purchaseProduct(transaction: Transaction): Observable<any> {
-    return this.http.post(API_URL + "purchase", JSON.stringify(transaction),
-  {headers: {"Content-Type":"application/json; charset=UTF-8"}});
-  }
 }

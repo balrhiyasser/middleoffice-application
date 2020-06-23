@@ -1,37 +1,32 @@
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {UserService} from './services/user.service';
-import {User} from './model/user';
-import {Role} from './model/role';
-import {Router, RoutesRecognized} from '@angular/router';
+import {Router} from '@angular/router';
+import { AuthenticationService } from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent{
-  title = 'client-product-management';
-  currentUser: User;
-  isAdminPanel: boolean = false;
-  constructor(private userService: UserService, private router: Router){
-    this.userService.currentUser.subscribe(data => {
-      this.currentUser = data;
-      this.userChanged();
-    });
+export class AppComponent implements OnInit{
+
+  title = 'client-awb-middleoffice';
+
+  constructor(private authService: AuthenticationService, private router: Router){};
+  
+
+  ngOnInit(): void {
+    this.authService.loadToken();  
   }
 
-  userChanged(){
-    if(!this.currentUser || Role.ADMIN !== this.currentUser.role){
-      this.isAdminPanel = false;
-      return;
-    }
-    this.router.events.subscribe((evt) => {
-      if(evt instanceof RoutesRecognized){
-        var roles = evt.state.root.firstChild.data.roles;
-        if(roles && roles.indexOf(this.currentUser.role)!== -1){
-          this.isAdminPanel = true;
-        }
-      }
-    });
+
+  isAdmin(){
+    return this.authService.isAdmin();
   }
+
+  isAuthenticated(){
+    return this.authService.isAuthenticated();
+
+  }
+  
 }

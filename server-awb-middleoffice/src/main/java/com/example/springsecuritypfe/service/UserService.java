@@ -3,7 +3,7 @@ package com.example.springsecuritypfe.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.springsecuritypfe.model.User;
+import com.example.springsecuritypfe.model.AppUser;
 
 public interface UserService {
 	
@@ -13,15 +13,15 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
-    Optional<User> findByUsername(String username);
+    Optional<AppUser> findByUsername(String username);
 
-    List<User> findAllUsers();
+    List<AppUser> findAllUsers();
 
     Long numberOfUsers();
 
-	User saveOrUpdateUser(User user) ;
+    AppUser saveOrUpdateUser(AppUser user) ;
 
-	Optional<User> findUserById(Long id) ;
+	Optional<AppUser> findUserById(Long id) ;
 
-	Optional<User> findByLoginAndPassword(String username, String password);
+	Optional<AppUser> findByLoginAndPassword(String username, String password);
 }

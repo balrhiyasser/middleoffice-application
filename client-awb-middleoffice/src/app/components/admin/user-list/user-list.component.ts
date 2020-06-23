@@ -51,17 +51,18 @@ export class UserListComponent implements OnInit {
 
   editUser(){
     this.adminService.updateUser(this.selectedUser).subscribe(data => {
+      console.log('salam');
       let itemIndex = this.userList.findIndex(item => item.id == this.selectedUser.id);
       this.userList[itemIndex] = this.selectedUser;
       this.dataSource = new MatTableDataSource(this.userList);
       this.infoMessage = "Informations are updated successfully !";
       $("#userModal").modal('hide');
     },err => {
-      if(err.status === 409){
         this.errorMessage = "Username should be unique for each user !";
-      }else{
-        this.errorMessage = "Unexpected error occurred !";
-      }
+        $("#userModal").modal('hide');
+        setTimeout(() => {
+          window.location.reload();
+        },2000 );
     });
   }
 

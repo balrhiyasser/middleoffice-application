@@ -19,7 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.springsecuritypfe.exception.BusinessResourceException;
-import com.example.springsecuritypfe.model.User;
+import com.example.springsecuritypfe.model.AppUser;
 import com.example.springsecuritypfe.repository.UserRepository;
 
 
@@ -47,10 +47,10 @@ public class UserServiceImplTest {
     
     @Test
     public void testFindAllUsers() throws Exception {
-    	User user = new User("Dupont", "password");
-    	List<User> allUsers = Arrays.asList(user);           
+    	AppUser user = new AppUser("Dupont", "password");
+    	List<AppUser> allUsers = Arrays.asList(user);           
         Mockito.when(userRepository.findAll()).thenReturn(allUsers);
-    	Collection<User> users = userService.findAllUsers();
+    	Collection<AppUser> users = userService.findAllUsers();
     	assertNotNull(users);
     	assertEquals(users, allUsers);
     	assertEquals(users.size(), allUsers.size());
@@ -59,29 +59,29 @@ public class UserServiceImplTest {
     
     @Test
     public void testSaveUser() throws Exception {
-    	User user = new User("Dupont", "password");
-    	User userMock = new User(1L, "Dupont", "password");
+    	AppUser user = new AppUser("Dupont", "password");
+    	AppUser userMock = new AppUser(1L, "Dupont", "password");
     	Mockito.when(userRepository.save((user))).thenReturn(userMock);
-    	User userSaved = userService.saveOrUpdateUser(user);
+    	AppUser userSaved = userService.saveOrUpdateUser(user);
     	assertNotNull(userSaved);
     	assertEquals(userMock.getId(), userSaved.getId());
      	assertEquals(userMock.getUsername(), userSaved.getUsername());
-     	verify(userRepository).save(any(User.class));
+     	verify(userRepository).save(any(AppUser.class));
     }
     
     @Test(expected=BusinessResourceException.class)
     public void testSaveUser_existing_login_throws_error() throws Exception {
-    	User user = new User("Dupont", "password");
+    	AppUser user = new AppUser("Dupont", "password");
     	Mockito.when(userRepository.save((user))).thenThrow(new DataIntegrityViolationException("Duplicate Login"));
     	userService.saveOrUpdateUser(user);
-     	verify(userRepository).save(any(User.class));
+     	verify(userRepository).save(any(AppUser.class));
     }
     
     @Test
     public void testFindUserByUsername() {
-    	User user = new User("Dupont", "password");
+    	AppUser user = new AppUser("Dupont", "password");
     	Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.ofNullable(user));
-        Optional<User> userFromDB = userService.findByUsername(user.getUsername());  
+        Optional<AppUser> userFromDB = userService.findByUsername(user.getUsername());  
         assertNotNull(userFromDB);
         assertThat(userFromDB.get().getUsername(), is(user.getUsername()));  
         verify(userRepository).findByUsername(any(String.class));
@@ -90,20 +90,20 @@ public class UserServiceImplTest {
     @Test
     public void testUpdateUser() throws Exception {
     	
-    	User userToUpdate = new User(1L, "NewDupont", "newPassword");
+    	AppUser userToUpdate = new AppUser(1L, "NewDupont", "newPassword");
     	
-    	User userFoundById = new User(1L,"OldDupont", "oldpassword");
+    	AppUser userFoundById = new AppUser(1L,"OldDupont", "oldpassword");
     	
-    	User userUpdated = new User(1L, "NewDupont", "newPassword");
+    	AppUser userUpdated = new AppUser(1L, "NewDupont", "newPassword");
     	
     	
     	Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userFoundById));
     	Mockito.when(passwordEncoder.matches(any(String.class), any(String.class))).thenReturn(false);
     	Mockito.when(passwordEncoder.encode(any(String.class))).thenReturn("newPassword");
     	Mockito.when(userRepository.save((userToUpdate))).thenReturn(userUpdated);
-    	User userFromDB = userService.saveOrUpdateUser(userToUpdate);
+    	AppUser userFromDB = userService.saveOrUpdateUser(userToUpdate);
     	assertNotNull(userFromDB);
-    	verify(userRepository).save(any(User.class));
+    	verify(userRepository).save(any(AppUser.class));
     	assertEquals(new Long(1), userFromDB.getId());
     	assertEquals("NewDupont", userFromDB.getUsername());
     	assertEquals("newPassword", userFromDB.getPassword());
@@ -111,7 +111,7 @@ public class UserServiceImplTest {
     
     @Test
     public void testDelete() throws Exception {
-    	User userTodelete = new User(1L, "Dupont", "password");
+    	AppUser userTodelete = new AppUser(1L, "Dupont", "password");
     	Mockito.doNothing().when(userRepository).deleteById(userTodelete.getId());
     	userService.deleteUser(userTodelete.getId());
     	

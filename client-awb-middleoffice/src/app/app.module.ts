@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,16 +13,13 @@ import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/admin/register/register.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { HomeComponent } from './components/user/home/home.component';
-import { DetailComponent } from './components/user/detail/detail.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { UserListComponent } from './components/admin/user-list/user-list.component';
-import { ProductListComponent } from './components/admin/product-list/product-list.component';
 import { UserTemplateComponent } from './components/template/user-template/user-template.component';
 import { AdminTemplateComponent } from './components/template/admin-template/admin-template.component';
 import { NotFoundComponent } from './components/error/not-found/not-found.component';
 import { UnathorizedComponent } from './components/error/unathorized/unathorized.component';
 import { CoursBbeComponent } from './components/admin/cours-bbe/cours-bbe.component';
-import { TransactionListComponent } from './components/admin/transaction-list/transaction-list.component';
 import { SettingsComponent } from './components/admin/settings/settings.component';
 
 
@@ -40,7 +37,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { ToastrModule } from 'ngx-toastr';
 import { CourbeBdtComponent } from './components/admin/courbe-bdt/courbe-bdt.component';
+import { ErrorIntercept } from './services/error.interceptor';
+import { ServerDownComponent } from './components/error/server-down/server-down.component';
+import { AuthenticationService } from './services/authentication.service';
+import { TokenIntercept } from './services/token.interceptor';
 
 
 
@@ -52,18 +54,16 @@ import { CourbeBdtComponent } from './components/admin/courbe-bdt/courbe-bdt.com
     RegisterComponent,
     ProfileComponent,
     HomeComponent,
-    DetailComponent,
     DashboardComponent,
     UserListComponent,
-    ProductListComponent,
     UserTemplateComponent,
     AdminTemplateComponent,
     NotFoundComponent,
     UnathorizedComponent,
-    TransactionListComponent,
     CoursBbeComponent,
     SettingsComponent,
-    CourbeBdtComponent
+    CourbeBdtComponent,
+    ServerDownComponent
   ],
   imports: [
     BrowserModule,
@@ -81,12 +81,28 @@ import { CourbeBdtComponent } from './components/admin/courbe-bdt/courbe-bdt.com
     MatSortModule,
     MatProgressBarModule,
     MatIconModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-top-center',
+    }),
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorIntercept,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenIntercept,
+      multi: true
+    },
+    [AuthenticationService]
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

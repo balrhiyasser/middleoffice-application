@@ -3,6 +3,7 @@ import {UserService} from "../../../services/user.service";
 import {User} from "../../../model/user";
 import {Role} from "../../../model/role";
 import {Router} from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-user-template',
@@ -10,25 +11,29 @@ import {Router} from '@angular/router';
   styleUrls: ['./user-template.component.css']
 })
 export class UserTemplateComponent implements OnInit {
-  currentUser: User;
+  username: string;
+  role: any;
 
-  constructor(private userService: UserService, private router: Router) {
-    this.userService.currentUser.subscribe(data => {
-      this.currentUser = data;
-    });
+  constructor(private authService: AuthenticationService, private router: Router) {
+    this.username=this.authService.username;
+    this.role=this.authService.roles;
   }
 
   ngOnInit() {
   }
 
-  logOut(){
-    this.userService.logOut().subscribe(data => {
-      this.router.navigate(['/login']);
-    });
+  isAdmin(){
+    return this.authService.isAdmin();
   }
 
-  get isAdmin(){
-      return this.currentUser && this.currentUser.role === Role.ADMIN;
+  isAuthenticated(){
+    return this.authService.isAuthenticated();
+
+  }
+
+  logOut(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }

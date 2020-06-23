@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../../services/user.service";
 import {User} from "../../../model/user";
 import {Router} from "@angular/router";
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,19 +11,21 @@ import {Router} from "@angular/router";
 })
 export class ProfileComponent implements OnInit {
 
-  currentUser: User;
+  username: String;
+  role:any;
 
-  constructor(private userService: UserService, private router: Router) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  constructor(private authService: AuthenticationService, private router: Router) {
+    this.username=this.authService.username;
+    this.role=this.authService.roles;
    }
 
   ngOnInit() {
   }
 
   logOut(){
-    this.userService.logOut().subscribe(data => {
-      this.router.navigate(['/login']);
-    });
+    this.authService.logout();
+    this.router.navigate(['/login']);
+
   }
 
 }

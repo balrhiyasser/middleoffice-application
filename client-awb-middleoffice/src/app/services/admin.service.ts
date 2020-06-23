@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../model/user';
-import {Product} from '../model/product';
-import { CoursBBE } from '../model/coursBBE';
 import { Parameter } from '../model/parameter';
+import { AuthenticationService } from './authentication.service';
 
 let API_URL = "http://localhost:8080/api/admin/";
 
@@ -12,14 +11,12 @@ let API_URL = "http://localhost:8080/api/admin/";
   providedIn: 'root'
 })
 export class AdminService {
-  currentUser: User;
+ 
   headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  constructor(private http: HttpClient, private authService: AuthenticationService) {
     this.headers = new HttpHeaders({
-      authorization:'Bearer '+ this.currentUser.token,
-      "Content-Type":"application/json; charset=UTF-8"
+      authorization:'Bearer '+ this.authService.jwtToken,"Content-Type":"application/json; charset=UTF-8"
     });
   }
 
@@ -39,6 +36,43 @@ export class AdminService {
     return this.http.get("http://localhost:8080/courbebdt", {params,
   headers: this.headers});
   }
+
+  //////////////// traitement de calcul //////////////////////
+
+  generateBDT(date): Observable<any> {
+    const params = new HttpParams().set('dateCourbe', date);
+    return this.http.get("http://localhost:8080/courbebdt/generate", {params,
+  headers: this.headers});
+
+  }
+
+  /////////////////////////////////////////////////////////////
+
+  generateCourbeST(date): Observable<any> {
+
+    const params = new HttpParams().set('dateCourbe', date);
+    return this.http.get("http://localhost:8080/courbebdt/shorterm", {params,
+  headers: this.headers});
+
+  }
+
+  generateCourbeLT(date): Observable<any> {
+
+    const params = new HttpParams().set('dateCourbe', date);
+    return this.http.get("http://localhost:8080/courbebdt/longterm", {params,
+  headers: this.headers});
+
+  }
+
+  generateTaux(date): Observable<any> {
+
+    const params = new HttpParams().set('dateTaux', date);
+    return this.http.get("http://localhost:8080/tmpjj", {params,
+  headers: this.headers});
+
+  }
+
+  /////////////////////////////////////////////////////////////
 
   updateUser(user: User): Observable<any> {
     return this.http.put(API_URL + "user-update", JSON.stringify(user),
@@ -83,43 +117,6 @@ export class AdminService {
 
   numberOfParameters(): Observable<any> {
     return this.http.get(API_URL + "settings-number",
-  {headers: this.headers});
-  }
-
-  //products
-  createProduct(product: Product): Observable<any> {
-    return this.http.post(API_URL + "product-create", JSON.stringify(product),
-  {headers: this.headers});
-  }
-
-  updateProduct(product: Product): Observable<any> {
-    return this.http.put(API_URL + "product-update", JSON.stringify(product),
-  {headers: this.headers});
-  }
-
-  deleteProduct(product: Product): Observable<any> {
-    return this.http.post(API_URL + "product-delete", JSON.stringify(product),
-  {headers: this.headers});
-  }
-
-  findAllProducts(): Observable<any> {
-    return this.http.get(API_URL + "product-all",
-  {headers: this.headers});
-  }
-
-  numberOfProducts(): Observable<any> {
-    return this.http.get(API_URL + "product-number",
-  {headers: this.headers});
-  }
-
-  //transactions
-  findAllTransactions(): Observable<any> {
-    return this.http.get(API_URL + "transaction-all",
-   {headers: this.headers});
-  }
-
-  numberOfTransactions(): Observable<any> {
-    return this.http.get(API_URL + "transaction-number",
   {headers: this.headers});
   }
 }

@@ -1,8 +1,6 @@
 package com.example.springsecuritypfe.service;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -10,17 +8,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.springsecuritypfe.exception.BusinessResourceException;
-import com.example.springsecuritypfe.model.User;
+import com.example.springsecuritypfe.model.AppUser;
 import com.example.springsecuritypfe.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 	
-	private static final Logger  logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private UserRepository userRepository;
     
@@ -35,9 +34,9 @@ public class UserServiceImpl implements UserService {
 	}
     
     @Override
-	public Optional<User> findUserById(Long id) throws  BusinessResourceException{
+	public Optional<AppUser> findUserById(Long id) throws  BusinessResourceException{
 		
-		Optional<User> userFound = userRepository.findById(id);
+		Optional<AppUser> userFound = userRepository.findById(id);
 		
         if (Boolean.FALSE.equals(userFound.isPresent())){
             throw new BusinessResourceException("User Not Found", "Aucun utilisateur avec l'identifiant :" + id);
@@ -47,38 +46,39 @@ public class UserServiceImpl implements UserService {
     
     
     @Override
-	public User saveOrUpdateUser(User user) throws BusinessResourceException{
+	public AppUser saveOrUpdateUser(AppUser user) throws BusinessResourceException{
 		try{
 			if(null ==user.getId()) {  // pas d'Id --> création d'un user
 				user.setPassword(passwordEncoder.encode(user.getPassword()));
 			} 
 			else {  //sinon, mise à jour d'un user
 				
-				Optional<User> userFromDB = findUserById(user.getId());
+				Optional<AppUser> userFromDB = findUserById(user.getId());
 				
-				if(! passwordEncoder.matches(user.getPassword(), userFromDB.get().getPassword())) {
+				user.setPassword(userFromDB.get().getPassword());
+				
+				/*if(! passwordEncoder.matches(user.getPassword(), userFromDB.get().getPassword())) {
 					user.setPassword(passwordEncoder.encode(user.getPassword()));  // MAJ du mot de passe s'il a été modifié
 				} 
 				
 				else {
 					user.setPassword(userFromDB.get().getPassword()); //Sinon, on remet le password déjà haché
-				}
+				}*/
 			}
 			
-			User result = userRepository.save(user);
-			
+			AppUser result = userRepository.save(user);
 			return  result;
 			
 		} catch(DataIntegrityViolationException ex){
-			logger.error("Utilisateur non existant", ex);
+			log.error("Utilisateur non existant", ex);
 			throw new BusinessResourceException("DuplicateValueError", "Un utilisateur existe déjà avec le compte : "+user.getUsername(), HttpStatus.CONFLICT);
 		
 		} catch (BusinessResourceException e) {
-			logger.error("Utilisateur non existant", e);
+			log.error("Utilisateur non existant", e);
 			throw new BusinessResourceException("UserNotFound", "Aucun utilisateur avec l'identifiant: "+user.getId(), HttpStatus.NOT_FOUND);
 		
 		} catch(Exception ex){
-			logger.error("Erreur technique de création ou de mise à jour de l'utilisateur", ex);
+			log.error("Erreur technique de création ou de mise à jour de l'utilisateur", ex);
 			throw new BusinessResourceException("SaveOrUpdateUserError", "Erreur technique de création ou de mise à jour de l'utilisateur: "+user.getUsername(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -117,13 +117,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByUsername(final String username) {
+    public Optional<AppUser> findByUsername(final String username) {
         return userRepository.findByUsername(username);
 	}
     
 
     @Override
-    public List<User> findAllUsers(){
+    public List<AppUser> findAllUsers(){
         return userRepository.findAll();
     }
 
@@ -133,19 +133,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-	public Optional<User> findByLoginAndPassword(String username, String password) throws BusinessResourceException{
+	public Optional<AppUser> findByLoginAndPassword(String username, String password) throws BusinessResourceException{
 		try {
-			Optional<User> userFound = this.findByUsername(username);
+			Optional<AppUser> userFound = this.findByUsername(username);
 			if(passwordEncoder.matches(password, userFound.get().getPassword())) {
 				return userFound;
 			} else {
 				throw new BusinessResourceException("UserNotFound", "Mot de passe incorrect", HttpStatus.NOT_FOUND);
 			}
 		} catch (BusinessResourceException ex) {
-			logger.error("Login ou mot de passe incorrect", ex);
+			log.error("Login ou mot de passe incorrect", ex);
 			throw new BusinessResourceException("UserNotFound", "Login ou mot de passe incorrect", HttpStatus.NOT_FOUND);
 		}catch (Exception ex) {
-			logger.error("Une erreur technique est survenue", ex);
+			log.error("Une erreur technique est survenue", ex);
 			throw new BusinessResourceException("TechnicalError", "Une erreur technique est survenue", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

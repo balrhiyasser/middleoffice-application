@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../../services/user.service';
 import {Router} from '@angular/router';
 import {User} from "../../../model/user";
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-admin-template',
@@ -9,21 +10,30 @@ import {User} from "../../../model/user";
   styleUrls: ['./admin-template.component.css']
 })
 export class AdminTemplateComponent implements OnInit {
-  currentUser: User;
+  username: string;
+  mode: any;
+  role: any;
 
-  constructor(private userService: UserService, private router: Router) {
-    this.userService.currentUser.subscribe(data => {
-      this.currentUser = data;
-    });
+  constructor(private authService: AuthenticationService, private router: Router) {
+    this.username=this.authService.username;
+    this.role=this.authService.roles;
   }
 
   ngOnInit() {
   }
 
+  isAdmin(){
+    return this.authService.isAdmin();
+  }
+
+  isAuthenticated(){
+    return this.authService.isAuthenticated();
+
+  }
+
   logOut(){
-    this.userService.logOut().subscribe(data => {
-      this.router.navigate(['/login']);
-    });
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }

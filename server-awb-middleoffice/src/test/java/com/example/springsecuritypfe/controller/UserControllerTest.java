@@ -25,13 +25,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.example.springsecuritypfe.model.User;
+import com.example.springsecuritypfe.model.AppUser;
 import com.example.springsecuritypfe.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = UserController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(controllers = AdminController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class UserControllerTest {
 
 	@Autowired
@@ -41,19 +41,19 @@ public class UserControllerTest {
 	@MockBean
 	private UserService userService;
 
-	User user;
+	AppUser user;
 
 	@Before
 	public void setUp() {
 		// Initialisation du setup avant chaque test
-		user = new User("Dupont", "password");
+		user = new AppUser("Dupont", "password");
 		objectMapper = new ObjectMapper();
 	}
 
 	@Test
 	public void testFindUserByLogin() throws Exception {
 		when(userService.findByLoginAndPassword("Dupont", "password")).thenReturn(Optional.ofNullable(user));
-		User userTofindByLogin = new User("Dupont", "password");
+		AppUser userTofindByLogin = new AppUser("Dupont", "password");
 		String jsonContent = objectMapper.writeValueAsString(userTofindByLogin);
 		// on execute la requête
 		MvcResult result = mockMvc
@@ -62,7 +62,7 @@ public class UserControllerTest {
 
 		assertEquals("Erreur de sauvegarde", HttpStatus.FOUND.value(), result.getResponse().getStatus());
 		verify(userService).findByLoginAndPassword(any(String.class), any(String.class));
-		User userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<User>() {
+		AppUser userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<AppUser>() {
 		});
 		assertNotNull(userResult);
 		assertEquals(new Long(1), userResult.getId());

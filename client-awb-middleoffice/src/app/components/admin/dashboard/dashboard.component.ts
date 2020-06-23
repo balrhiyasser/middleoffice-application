@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AdminService} from '../../../services/admin.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,33 +9,23 @@ import {AdminService} from '../../../services/admin.service';
 })
 export class DashboardComponent implements OnInit {
   userCount:any = "";
-  productCount:any = "";
-  transactionCount:any = "";
+  
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private authService: AuthenticationService) { }
 
   ngOnInit() {
+    if(this.isAdmin())
     this.numberOfUsers();
-    this.numberOfProducts();
-    this.numberOfTransactions();
+  }
+
+  isAdmin(){
+    return this.authService.isAdmin();
   }
 
   numberOfUsers(){
     this.adminService.numberOfUsers().subscribe(data => {
       this.userCount = data.response;
     });
-  }
-
-  numberOfProducts(){
-    this.adminService.numberOfProducts().subscribe(data => {
-      this.productCount = data.response;
-    });
-  }
-
-  numberOfTransactions(){
-    this.adminService.numberOfTransactions().subscribe(data => {
-      this.transactionCount = data.response;
-    })
   }
 
 }

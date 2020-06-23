@@ -11,17 +11,17 @@
         <a href="/home" class="nav-link">Home</a>
       </li>
       <li class="nav-item">
-        <a href="/dashboard" class="nav-link" *ngIf="isAdmin">Admin Panel</a>
+        <a href="/dashboard" class="nav-link" *ngIf="isAdmin()">Admin Panel</a>
       </li>
     </ul>
-    <ul class="nav navbar-nav navbar-right" *ngIf="!currentUser">
+    <ul class="nav navbar-nav navbar-right" *ngIf="!isAuthenticated()">
       <li class="nav-item">
         <a href="/login" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> Login</a>
       </li>
     </ul>
-    <ul class="nav navbar-nav navbar-right" *ngIf="currentUser">
+    <ul class="nav navbar-nav navbar-right" *ngIf="isAuthenticated()">
       <li class="nav-item">
-        <a href="/profile" class="nav-link"><span class="glyphicon glyphicon-user"></span> {{currentUser.name}} ( {{currentUser.role}} )</a>
+        <a href="/profile" style="text-transform:uppercase;" class="nav-link"><span class="glyphicon glyphicon-user"></span> {{username}} ( {{role}} )</a>
       </li>
       <li class="nav-item">
         <a (click)="logOut()" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> LOGOUT</a>

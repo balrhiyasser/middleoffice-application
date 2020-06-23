@@ -4,12 +4,12 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.springsecuritypfe.model.User;
+import com.example.springsecuritypfe.model.AppUser;
 
 
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<AppUser, Long> {
 	
 	//findBy + fieldName
-    Optional<User> findByUsername(String username);
+    Optional<AppUser> findByUsername(String username);
 }

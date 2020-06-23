@@ -31,13 +31,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.example.springsecuritypfe.model.User;
+import com.example.springsecuritypfe.model.AppUser;
 import com.example.springsecuritypfe.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = UserController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(controllers = AdminController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class AdminControllerTest {
 	
 	/*
@@ -60,13 +60,13 @@ public class AdminControllerTest {
 	@MockBean
 	private UserService userService;
 	
-	User user;
+	AppUser user;
 
 	@Before
 	public void setUp() {
 		// Initialisation du setup avant chaque test
-		user = new User("Dupont", "password");
-		List<User> allUsers = Arrays.asList(user);
+		user = new AppUser("Dupont", "password");
+		List<AppUser> allUsers = Arrays.asList(user);
 		objectMapper = new ObjectMapper();
 
 		// Mock de la couche de service
@@ -85,12 +85,12 @@ public class AdminControllerTest {
 		assertEquals("Réponse incorrecte", HttpStatus.FOUND.value(), result.getResponse().getStatus());
 		verify(userService).findAllUsers();
 		assertNotNull(result);
-		Collection<User> users = objectMapper.readValue(result.getResponse().getContentAsString(),
-				new TypeReference<Collection<User>>() {
+		Collection<AppUser> users = objectMapper.readValue(result.getResponse().getContentAsString(),
+				new TypeReference<Collection<AppUser>>() {
 				});
 		assertNotNull(users);
 		assertEquals(1, users.size());
-		User userResult = users.iterator().next();
+		AppUser userResult = users.iterator().next();
 		assertEquals(user.getUsername(), userResult.getUsername());
 		assertEquals(user.getPassword(), userResult.getPassword());
 
@@ -99,16 +99,16 @@ public class AdminControllerTest {
 	@Test
 	public void testSaveUser() throws Exception {
 
-		User userToSave = new User("Dupont", "password");
+		AppUser userToSave = new AppUser("Dupont", "password");
 		String jsonContent = objectMapper.writeValueAsString(userToSave);
-		when(userService.saveOrUpdateUser(any(User.class))).thenReturn(user);
+		when(userService.saveOrUpdateUser(any(AppUser.class))).thenReturn(user);
 		MvcResult result = mockMvc
 				.perform(post("/user/users").contentType(MediaType.APPLICATION_JSON).content(jsonContent))
 				.andExpect(status().isCreated()).andReturn();
 
 		assertEquals("Erreur de sauvegarde", HttpStatus.CREATED.value(), result.getResponse().getStatus());
-		verify(userService).saveOrUpdateUser(any(User.class));
-		User userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<User>() {
+		verify(userService).saveOrUpdateUser(any(AppUser.class));
+		AppUser userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<AppUser>() {
 		});
 		assertNotNull(userResult);
 		assertEquals(userToSave.getUsername(), userResult.getUsername());
@@ -119,7 +119,7 @@ public class AdminControllerTest {
 	@Test
 	public void testFindUserByLogin() throws Exception {
 		when(userService.findByLoginAndPassword("Dupont", "password")).thenReturn(Optional.ofNullable(user));
-		User userTofindByLogin = new User("Dupont", "password");
+		AppUser userTofindByLogin = new AppUser("Dupont", "password");
 		String jsonContent = objectMapper.writeValueAsString(userTofindByLogin);
 		// on execute la requête
 		MvcResult result = mockMvc
@@ -128,7 +128,7 @@ public class AdminControllerTest {
 
 		assertEquals("Erreur de sauvegarde", HttpStatus.FOUND.value(), result.getResponse().getStatus());
 		verify(userService).findByLoginAndPassword(any(String.class), any(String.class));
-		User userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<User>() {
+		AppUser userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<AppUser>() {
 		});
 		assertNotNull(userResult);
 		assertEquals(new Long(1), userResult.getId());
@@ -148,8 +148,8 @@ public class AdminControllerTest {
 	@Test
 	public void testUpdateUser() throws Exception {
 
-		User userToUpdate = new User("Toto", "password");
-		User userUpdated = new User(2L, "Toto", "password");
+		AppUser userToUpdate = new AppUser("Toto", "password");
+		AppUser userUpdated = new AppUser(2L, "Toto", "password");
 		String jsonContent = objectMapper.writeValueAsString(userToUpdate);
 		when(userService.saveOrUpdateUser(userToUpdate)).thenReturn(userUpdated);
 		// on execute la requête
@@ -158,8 +158,8 @@ public class AdminControllerTest {
 						.accept(MediaType.APPLICATION_JSON).content(jsonContent))
 				.andExpect(status().isOk()).andReturn();
 
-		verify(userService).saveOrUpdateUser(any(User.class));
-		User userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<User>() {
+		verify(userService).saveOrUpdateUser(any(AppUser.class));
+		AppUser userResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<AppUser>() {
 		});
 		assertNotNull(userResult);
 		assertEquals(new Long(2), userResult.getId());

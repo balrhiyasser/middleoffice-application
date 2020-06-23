@@ -1,16 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-end" style="margin-left:90px;">
   <div>
-    <ul class="nav navbar-nav navbar-right" *ngIf="!currentUser">
-      <li class="nav-item">
-        <a href="/register" class="nav-link"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
-      </li>
+    <ul class="nav navbar-nav navbar-right" *ngIf="!isAuthenticated()">
       <li class="nav-item">
         <a href="/login" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> Login</a>
       </li>
     </ul>
-    <ul class="nav navbar-nav navbar-right" *ngIf="currentUser">
+    <ul class="nav navbar-nav navbar-right" *ngIf="isAuthenticated()">
       <li class="nav-item">
-        <a href="/profile" class="nav-link"><span class="glyphicon glyphicon-user"></span> {{currentUser.name}} ( {{currentUser.role}} )</a>
+        <a href="/profile" style="text-transform:uppercase;" class="nav-link"><span class="glyphicon glyphicon-user"></span> {{username}} ( {{role}} )</a>
       </li>
       <li class="nav-item">
         <a (click)="logOut()" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> LOGOUT</a>
@@ -48,18 +45,6 @@
       <a href="/courbe-bdt" class="nav-link">
         <span class="glyphicon glyphicon-usd"></span>
         <span>CourbeBDT</span>
-      </a>
-    </li>
-    <li class="nav-item" [class.active]="router.url==='/product-list'">
-      <a href="/product-list" class="nav-link">
-        <span class="glyphicon glyphicon-th-large"></span>
-        <span>Product List</span>
-      </a>
-    </li>
-    <li class="nav-item" [class.active]="router.url==='/transaction-list'">
-      <a href="/transaction-list" class="nav-link">
-        <span class="glyphicon glyphicon-usd"></span>
-        <span>Purchases</span>
       </a>
     </li>
     <li class="nav-item" [class.active]="router.url==='/settings'">

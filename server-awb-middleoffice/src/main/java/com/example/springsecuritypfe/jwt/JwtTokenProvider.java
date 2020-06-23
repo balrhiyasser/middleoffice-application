@@ -56,6 +56,7 @@ public class JwtTokenProvider {
                 .map(role -> role.startsWith("ROLE_")?role:"ROLE_"+role)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+        
         return username!= null ? new UsernamePasswordAuthenticationToken(username, null, authorities): null;
         
     }

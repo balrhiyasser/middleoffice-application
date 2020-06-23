@@ -13,5 +13,8 @@ public interface CourbeBDTService {
     List<CourbeBDT> findAllBDT();
     
     List<CourbeBDT> findByDate(String date);
+    
+    //String getTMP(String date) ;
+
 
 }
