@@ -1,0 +1,9 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-end">
+    <div>
+      <ul class="nav navbar-nav navbar-right" *ngIf="!isAuthenticated()">
+        <li class="nav-item">
+          <a href="/login" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> Connexion</a>
+        </li>
+      </ul>
+    </div>
+</nav>

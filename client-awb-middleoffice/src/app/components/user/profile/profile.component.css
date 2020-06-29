@@ -1,7 +1,6 @@
-.log-out{
-  cursor: pointer;
-    color: coral!important;
-    font-size: large;
+
+* {
+  font-family: 'Lato';
 }
 
 .page{
@@ -9,6 +8,40 @@
   text-align: center;
   height: 100%;
   width: 100%;
-  
+  padding-top: 50px;
 }
 
+
+.emp-profile{
+  padding: 3%;
+  border-radius: 1rem;
+  width: 60%;
+  height: 500px;
+  background: -webkit-linear-gradient(left, #fff, orange);  
+  text-align: left;
+}
+
+
+.profile-head h5{
+  color: #333;
+}
+.profile-head h6{
+  color: #0062cc;
+}
+
+.profile-infos{
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #818182;
+  margin-top: 5%;
+}
+
+.profile-tab label{
+  font-weight: 600;
+  padding-left: 12px;
+}
+.profile-tab p{
+  font-weight: 600;
+  color: #0062cc;
+}

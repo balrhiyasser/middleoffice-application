@@ -82,7 +82,7 @@ public class TMPJJServiceImpl implements TMPJJService {
         	
         }
         
-        System.out.println("Taux moyen pondéré récupéré pour le jour : "+dateformatted+" est : "+ taux);
+        log.info("Taux moyen pondéré récupéré pour le jour : "+dateformatted+" est : "+ taux);
         
 		return taux;
 	}

@@ -26,7 +26,7 @@ export class AdminService {
   }
 
   getcoursbbe(date): Observable<any> {
-    const params = new HttpParams().set('date', date);
+    const params = new HttpParams().set('dateCourbe', date);
     return this.http.get("http://localhost:8080/coursbbe", {params,
   headers: this.headers});
   }
@@ -39,6 +39,13 @@ export class AdminService {
 
   //////////////// traitement de calcul //////////////////////
 
+  generateBBE(date): Observable<any> {
+    const params = new HttpParams().set('dateCourbe', date);
+    return this.http.get("http://localhost:8080/coursbbe/generate", {params,
+  headers: this.headers});
+
+  }
+  
   generateBDT(date): Observable<any> {
     const params = new HttpParams().set('dateCourbe', date);
     return this.http.get("http://localhost:8080/courbebdt/generate", {params,
@@ -75,7 +82,7 @@ export class AdminService {
   /////////////////////////////////////////////////////////////
 
   updateUser(user: User): Observable<any> {
-    return this.http.put(API_URL + "user-update", JSON.stringify(user),
+    return this.http.put("http://localhost:8080/api/user-update", JSON.stringify(user),
   {headers: this.headers});
   }
 
@@ -88,6 +95,13 @@ export class AdminService {
     return this.http.get(API_URL + "user-all",
   {headers: this.headers});
   }
+
+  findUserDetails(username): Observable<any> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get("http://localhost:8080/api/user-details",{params,
+    headers: this.headers});
+  }
+
 
   numberOfUsers(): Observable<any> {
     return this.http.get(API_URL + "user-number",
@@ -119,4 +133,48 @@ export class AdminService {
     return this.http.get(API_URL + "settings-number",
   {headers: this.headers});
   }
+
+  //download files
+  /*public async DownloadSTFile(date): Promise<Blob> {
+    const params = new HttpParams().set('date', date);
+    const file =  await this.http.get<Blob>(
+      "http://localhost:8080/download/COURBE_MS_ST_"+date.substring(8,10)+date.substring(5,7)+date.substring(0,4)+".csv",{params,headers: this.headers,responseType: ResponseContentType.Blob}).toPromise();
+    return file;
+  }*/
+
+  DownloadSTFile(date): Observable<any>{
+    const params = new HttpParams().set('date', date);
+		return this.http.get('http://localhost:8080/download/shorterm', {params,headers: this.headers, responseType: 'blob'});
+  }
+
+  DownloadLTFile(date): Observable<any>{
+    const params = new HttpParams().set('date', date);
+		return this.http.get('http://localhost:8080/download/longterm', {params,headers: this.headers, responseType: 'blob'});
+  }
+
+  DownloadTMPFile(date): Observable<any>{
+    const params = new HttpParams().set('date', date);
+		return this.http.get('http://localhost:8080/download/tmp', {params,headers: this.headers, responseType: 'blob'});
+  }
+
+  DownloadCSVFile(date): Observable<any>{
+    const params = new HttpParams().set('date', date);
+		return this.http.get('http://localhost:8080/download/coursbbecsv', {params,headers: this.headers, responseType: 'blob'});
+  }
+
+  DownloadEXFile(date): Observable<any>{
+    const params = new HttpParams().set('date', date);
+		return this.http.get('http://localhost:8080/download/coursbbeexcel', {params,headers: this.headers, responseType: 'blob'});
+  }
+
+  DownloadBAMFile(date): Observable<any>{
+    const params = new HttpParams().set('date', date);
+		return this.http.get('http://localhost:8080/download/BAMFX03', {params,headers: this.headers, responseType: 'blob'});
+  }
+
+  DownloadWAFAFile(date): Observable<any>{
+    const params = new HttpParams().set('date', date);
+		return this.http.get('http://localhost:8080/download/WAFACASH', {params,headers: this.headers, responseType: 'blob'});
+  }
+
 }

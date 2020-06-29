@@ -13,6 +13,8 @@ public interface CourbeSTService {
 
     List<CourbeST> findAllST();
     
+    List<CourbeST> findByMaturite(Long maturite);
+
     List<CourbeST> findByDate(String date) throws ParseException;
     
     List<CourbeST> generateCourbeST(String date) throws ParseException;

@@ -27,9 +27,9 @@
                       Extraire
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="http://localhost:8080/download/COURBE_MS_ST_{{date.value.substring(8,10) + date.value.substring(5,7)+ date.value.substring(0,4)}}.csv?date={{date.value}}">Courbe de Taux ST</a>
-                      <a class="dropdown-item" href="http://localhost:8080/download/COURBE_MS_LT_{{date.value.substring(8,10) + date.value.substring(5,7)+ date.value.substring(0,4)}}.csv?date={{date.value}}">Courbe de Taux LT</a>
-                      <a class="dropdown-item" href="http://localhost:8080/download/TMPJJ{{date.value.substring(8,10) + date.value.substring(5,7)+ date.value.substring(0,4)}}.csv?date={{date.value}}">TMPJJ</a>
+                      <a class="dropdown-item" (click)="DownloadSTFile(date.value)">Courbe de Taux ST</a>
+                      <a class="dropdown-item" (click)="DownloadLTFile(date.value)">Courbe de Taux LT</a>
+                      <a class="dropdown-item" (click)="DownloadTMPFile(date.value)">TMPJJ</a>
                     </div>
                   </div>
                 </div> 

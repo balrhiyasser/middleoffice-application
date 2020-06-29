@@ -1,11 +1,15 @@
 package com.example.springsecuritypfe.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -43,6 +47,11 @@ public class CourbeBDTServiceImpl implements CourbeBDTService {
 	@Override
 	public List<CourbeBDT> findAllBDT() {
         return courbeRepository.findAll();
+	}
+	
+	@Override
+	public List<CourbeBDT> findByMaturite(Long maturite) {
+		return courbeRepository.findByMaturite(maturite);
 	}
 	
 	@Override
@@ -93,39 +102,32 @@ public class CourbeBDTServiceImpl implements CourbeBDTService {
 		
 	}
 	
-	/*@Override
-	public String getTMP(String date) {
-				
-		String dateformatted = date.substring(8,10)+"/"+date.substring(5,7)+"/"+date.substring(0,4) ;
 	
-		final String url = "http://www.bkam.ma/Marches/Principaux-indicateurs/Marche-monetaire/Marche-monetaire-interbancaire";
+	@Override
+	public List<CourbeBDT> generateBDT(List<CourbeBDT> res) throws ParseException {
 		
-        String taux = "" ;
-        
-        try {
+		for (CourbeBDT courbeBDT : res) {
 
-            final Document document = Jsoup.connect(url).proxy(null).get();
-            
-            for (Element row : document.select("table.dynamic_contents_ref_5 tr")) {
-            	
-            	if(row.select("td:nth-of-type(1)").text().equals(dateformatted)) {	
-            		taux = taux+row.select("td:nth-of-type(2)").text().substring(0,5);
-            		System.out.println(taux);
-            		break;
-            	}
-            }
-        }
-            
-        catch (Exception ex) {
-        	
-        	ex.printStackTrace();
-        	
-        }
-        
-        System.out.println("Taux moyen pondéré récupéré pour le jour : "+dateformatted+" est : "+ taux);
-        
-		return taux;
+    		Date dateEcheance=new SimpleDateFormat("yyyy-MM-dd").parse(courbeBDT.getDateEcheance());
+    		
+    		Date dateValeur=new SimpleDateFormat("yyyy-MM-dd").parse(courbeBDT.getDateValeur());
 
-}*/
+    		DateTime dt1 = new DateTime(dateEcheance);
+    		
+    		DateTime dt2 = new DateTime(dateValeur);
+    			    	
+    		courbeBDT.setMaturite((long)Days.daysBetween(dt2, dt1).getDays());
+    		
+		}
+		
+		courbebdtService.saveCourbe(res);
+		
+    	log.info("les courbes de taux sont bien générées.");
+    	
+    	return res;
+	}
+
+	
+	
 	
 }

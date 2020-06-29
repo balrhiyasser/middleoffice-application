@@ -15,8 +15,9 @@ declare var $: any;
 export class UserListComponent implements OnInit {
   userList: Array<User>;
   dataSource: MatTableDataSource<User> = new MatTableDataSource();
-  displayedColumns: string[] = ['id', 'name', 'username', 'action'];
+  displayedColumns: string[] = ['name', 'username', 'email', 'action'];
   selectedUser: User = new User();
+  user: User = new User();
   errorMessage: string;
   infoMessage: string;
 
@@ -63,6 +64,29 @@ export class UserListComponent implements OnInit {
         setTimeout(() => {
           window.location.reload();
         },2000 );
+    });
+  }
+
+  /*=============================================*/
+
+  addUserRequest() {
+    $("#createuserModal").modal('show');
+  }
+
+  createUser(){
+    this.adminService.register(this.user).subscribe(data => {
+      console.log('salam');
+      let itemIndex = this.userList.findIndex(item => item.id == this.selectedUser.id);
+      this.userList[itemIndex] = this.selectedUser;
+      this.dataSource = new MatTableDataSource(this.userList);
+      this.infoMessage = "User is added successfully !";
+      $("#createuserModal").modal('hide');
+      setTimeout(() => {
+        window.location.reload();
+      },2000 );
+    },err => {
+        this.errorMessage = "Username is already exist !";
+        $("#createuserModal").modal('hide');
     });
   }
 

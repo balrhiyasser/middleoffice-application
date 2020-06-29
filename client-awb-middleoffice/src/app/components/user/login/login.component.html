@@ -1,27 +1,41 @@
 
 <div class="register">
   <div class="row">
-      <div class="col-md-3 register-left">
+      <div class="col-md-4 register-left">
           <img src="../../../../assets/imgs/logo.png" alt="logo"/>
-          <h3>Welcome</h3>
-          <p>The middle office is the department in a financial services company, investment bank, or hedge fund that manages risk and calculates profits and losses. It is generally in charge of information technology (IT) as well.</p>
+          <h3>Bonjour</h3>
+          <p style="text-justify: inter-word;">Le middle office assure l'analyse des résultats de la salle de marché, suit le niveau des risques pris par les opérateurs <i>traders</i> et gère en général les ressources informatiques communes au front office et au back office.</p>
       </div>
-      <div class="col-md-9 register-right">
+      <div class="col-md-8 register-right">
                   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                           <div class="register-form">
                               <div class="col-md-12">
                                   <form name="form-signin" (ngSubmit)="f.form.valid && onLogin(f.value)" #f="ngForm" novalidate>
-                                    <h3 class="display-3 register-heading">LOGIN</h3>
+                                    <h3 class="display-3 register-heading">CONNEXION</h3>
                                     <div class="alert alert-danger" role="alert" *ngIf="errorMessage">{{errorMessage}}</div>
-                                  <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-                                    <input type="text" class="form-control input-text-custom" id="username" placeholder="Username" name="username" [(ngModel)]="user.username" #username="ngModel" required />
-                                    <div *ngIf="f.submitted && !username.valid" class="help-block">An valid username is required.</div>
+
+                                  <div class="input-group form-group">
+                                    <div class="input-group-prepend">
+                                      <div class="input-group-text"><span class="glyphicon glyphicon-user"></span></div>
+                                    </div>
+                                    <input type="text" name="username" class="form-control" placeholder="Identifiant" [(ngModel)]="user.username" #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required>
+                                    
+                                    <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
+                                        <div *ngIf="username.errors.required">Veuillez entrer votre identifiant !</div>
+                                    </div>
                                   </div>
-                                  <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-                                    <input type="password" class="form-control input-text-custom" id="password" placeholder="Password" name="password" [(ngModel)]="user.password" #password="ngModel" required />
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required.</div>
+
+                                  <div class="input-group form-group">
+                                    <div class="input-group-prepend">
+                                      <div class="input-group-text"><span class="glyphicon glyphicon-lock"></span></div>
+                                    </div>
+                                    <input type="password" name="password" class="form-control" placeholder="Mot de passe" [(ngModel)]="user.password" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required>
+                                    <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
+                                        <div *ngIf="password.errors.required">Veuillez entrer votre mot de passe !</div>
+                                    </div>
                                   </div>
-                                  <button class="btnRegister" type="submit">Sign In</button>
+
+                                  <button class="btnRegister" type="submit">Connecter</button>
                                 </form>
                               </div>
                             </div>

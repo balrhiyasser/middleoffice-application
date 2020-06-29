@@ -10,15 +10,22 @@ import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.springsecuritypfe.model.AppUser;
+import com.example.springsecuritypfe.model.Role;
 
 
 @RunWith(SpringRunner.class) //permet d'établir une liaison entre JUnit et Spring
-@DataJpaTest
+@DataJpaTest 
+/*@DataJpaTest est une implémentation Spring de JPA qui fournit une configuration intégrée de la base de données MySQL, Hibernate, SpringData,
+ et la DataSource. Cette annotation active également la détection des entités annotées par Entity, et intègre aussi la gestion des logs SQL.*/
+
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class UserRepositoryTest {
 
 	@Autowired
@@ -26,22 +33,23 @@ public class UserRepositoryTest {
 	@Autowired
     private UserRepository userRepository;
 	
-	AppUser user = new AppUser("Dupont", "password");
+	AppUser user = new AppUser("Dupont","Nicolas Dupont",Role.USER, "password");
 	
 	@Before
 	public void setup(){
 	    entityManager.persist(user); // on sauvegarde l'objet user au début de chaque test
 	    entityManager.flush();
 	}
+			
 	@Test
 	public void testFindAllUsers() {
 	    List<AppUser> users = userRepository.findAll();
-	    assertThat(4, is(users.size())); // On a 3 Users dans le fichier d'initialisation data.sql et un utilisateur ajouté lors du setup du test
+	    assertThat(1, is(users.size())); // On a 3 Users dans le fichier d'initialisation data.sql et un utilisateur ajouté lors du setup du test
 	}
 	
 	@Test
     public void testSaveUser(){
-		AppUser user = new AppUser("Paul", "password");
+		AppUser user = new AppUser("Paul","John Paul",Role.USER, "password");
 		AppUser userSaved =  userRepository.save(user);
 		assertNotNull(userSaved.getId());
 	    assertThat("Paul", is(userSaved.getUsername())); 
@@ -53,8 +61,8 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testFindByLogin() {
-	    Optional<AppUser> userFromDB = userRepository.findByUsername("yasser");	 
-	    assertThat("yasser", is(userFromDB.get().getUsername())); // yasser a été crée lors de l'initialisation du fichier data.sql     
+	    Optional<AppUser> userFromDB = userRepository.findByUsername("Dupont");	 
+	    assertThat("Dupont", is(userFromDB.get().getUsername())); // yasser a été crée lors de l'initialisation du fichier data.sql     
 	}
 	
 	@Test

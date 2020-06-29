@@ -3,8 +3,13 @@ package com.example.springsecuritypfe.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -50,6 +55,11 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 	}
 
 	@Override
+	public List<CourbeST> findByMaturite(Long maturite) {
+		return courbeRepository.findByMaturite(maturite);	
+	}
+	
+	@Override
 	public List<CourbeST> findByDate(String date) throws ParseException {
 		List<CourbeST> courbelist = courbeRepository.findByDateCourbe(date);
 		if (!courbelist.isEmpty()) {
@@ -64,13 +74,18 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 	
 	 Long GetMaturite(String DateEcheance, String DateValeur) throws ParseException {
 		
-		long dateEcheance=new SimpleDateFormat("yyyy-MM-dd").parse(DateEcheance).getTime();
-		long dateValeur=new SimpleDateFormat("yyyy-MM-dd").parse(DateValeur).getTime();
-		return (dateEcheance-dateValeur)/(1000*60*60) ;
+		Date dateEcheance=new SimpleDateFormat("yyyy-MM-dd").parse(DateEcheance);
+			
+		Date dateValeur=new SimpleDateFormat("yyyy-MM-dd").parse(DateValeur);
+
+		DateTime dt1 = new DateTime(dateEcheance);
+		
+		DateTime dt2 = new DateTime(dateValeur);
+					    			
+		return (long)Days.daysBetween(dt2, dt1).getDays() ;
 		
 	}
 	
-
 	@Override
 	public List<CourbeST> generateCourbeST(String date) throws ParseException {
 		
@@ -78,47 +93,86 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 		
 		List<CourbeBDT> bdtlist = courbebdtService.findByDate(date);
 		
+		Long maturiteltcourbe = 0L ;
+		
+		Collections.sort(bdtlist, new Comparator<CourbeBDT>() {
+		    @Override
+		    public int compare(CourbeBDT courbe1, CourbeBDT courbe2) {
+		        return courbe1.getMaturite().compareTo(courbe2.getMaturite()) ;
+		}});
+			
+		for (int i = 0; i < bdtlist.size()+1; i++) {	
+			
+			if( bdtlist.get(i).getMaturite() > 365 ) {
+				maturiteltcourbe = bdtlist.get(i).getMaturite(); break ; 
+			}	
+		}
+		
 		List<CourbeST> stlist = new ArrayList<CourbeST>();
+		
+		CourbeST lastelement = new CourbeST() ;
 		
 		log.info("Les courbes de taux court terme correspondants à la date "+date+":");
 		
-		try {
-			
+		try {	
 			for (int i = 0; i < bdtlist.size()+1; i++) {
 				
 				CourbeST element = new CourbeST() ;
-
+				
 				if(i==0) {
+					
+					String tmp = tauxService.getTMP((bdtlist.get(i).getDateCourbe())).replace(",", ".");
 					element.setDateCourbe(date);
-					element.setTaux(Double.parseDouble(tauxService.getTMP((bdtlist.get(i).getDateCourbe())).replace(",", ".")));
-					System.out.println(element.getTaux());
+					if(tmp=="") { element.setTaux(null);}
+					else { element.setTaux(Double.parseDouble(tmp)); }
 					element.setMaturite(1L);
 					stlist.add(i, element);
-					log.info("first element "+element.getDateCourbe()+" | "+element.getTaux()+" | "+element.getMaturite());
 					
+					//log.info("first element "+element.getDateCourbe()+" | "+element.getTaux()+" | "+element.getMaturite());	
 				}
-				else {
-					
+				else {	
 					long maturite = GetMaturite(bdtlist.get(i-1).getDateEcheance(),bdtlist.get(i-1).getDateValeur());
-
 					if(maturite<365) {
 						element.setDateCourbe((bdtlist.get(i-1).getDateCourbe()));
 						element.setTaux(bdtlist.get(i-1).getTmp());;
 						element.setMaturite(maturite);
 						stlist.add(i, element);
 						
-						log.info(element.getDateCourbe()+" | "+element.getTaux()+" | "+element.getMaturite());	
+					//log.info(element.getDateCourbe()+" | "+element.getTaux()+" | "+element.getMaturite());	
 					}
 				}
 			}
-	
-		} catch (Exception e) {
-			log.error("Erreur lors de la génération des courbes de taux court terme "+e);
-		}
-
-
-		if(stlist.size()==0) {
 			
+			lastelement.setDateCourbe(date);
+			
+			lastelement.setMaturite(maturiteltcourbe);
+
+			// transférer le taux actuarial en un taux monétaire
+			
+			Double tauxactuarial = courbebdtService.findByMaturite(maturiteltcourbe).get(0).getTmp();
+					
+			Double tauxmonetaire = 	(Math.pow(1d+tauxactuarial,(double)maturiteltcourbe/365L)-1)*(360d/maturiteltcourbe);
+
+			//log.info("taux actuarial : " + tauxactuarial);
+
+			//log.info("maturite : " + maturiteltcourbe);
+			
+			//log.info("taux monetaire: " + (double) Math.round(tauxmonetaire * 1000) / 1000);
+
+			lastelement.setTaux((double) Math.round(tauxmonetaire * 1000) / 1000);
+			
+			stlist.add(lastelement);
+			
+			//log.info("last element "+lastelement.getDateCourbe()+" | "+lastelement.getTaux()+" | "+lastelement.getMaturite());
+
+		} catch (Exception e) {
+			
+			log.error("Erreur lors de la génération des courbes de taux court terme ");
+			e.printStackTrace();
+		}
+		
+		if(stlist.size()==0) {
+
 			log.info("La liste courbe de taux court terme est vide.");
 		}
 		
@@ -127,11 +181,10 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 			courbestService.saveCourbe(stlist);
 			
 			log.info("Les courbes de taux court terme correspondants à la date "+date+" sont bien enregistrées dans la base de données.");
-	
-		}
-				
-		return stlist;
 		
+		}		
+		
+		return stlist;		
 	}
 
 	@Override

@@ -5,11 +5,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AdminService } from 'src/app/services/admin.service';
 import { CourbeBDT } from 'src/app/model/courbeBDT';
-import { CourbeST } from 'src/app/model/CourbeST';
-import { CourbeLT } from 'src/app/model/CourbeLT';
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { TauxTMPJJ } from 'src/app/model/tmpjj';
+import * as fileSaver from 'file-saver';
 
 declare var $: any;
 
@@ -22,6 +21,7 @@ export class CourbeBdtComponent implements OnInit {
 
   courbeList: Array<CourbeBDT>;
   dateCourbe:Date;
+  dateCourbestring:string;
   dataSource: MatTableDataSource<CourbeBDT> = new MatTableDataSource();
   dataSourceST: MatTableDataSource<CourbeBDT> = new MatTableDataSource();
   dataSourceLT: MatTableDataSource<CourbeBDT> = new MatTableDataSource();
@@ -144,4 +144,42 @@ export class CourbeBdtComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  DownloadSTFile(value) {
+    this.dateCourbe=value;
+    this.dateCourbestring=value;
+    let datefichier = this.dateCourbestring.substring(8,10) + this.dateCourbestring.substring(5,7)+ this.dateCourbestring.substring(0,4) ;  
+    this.adminService.DownloadSTFile(this.dateCourbe).subscribe(response => {
+			let blob:any = new Blob([response], { type: 'text/csv; charset=utf-8' });
+      fileSaver.saveAs(blob, 'COURBE_MS_ST_'+datefichier+'.csv');
+      console.log('Fichier Courbe de Taux ST téléchargé avec succès!');
+		},err => {
+      console.log('Erreur lors du téléchargement de fichier!');     
+    });
+  }
+
+  DownloadLTFile(value) {
+    this.dateCourbe=value;
+    this.dateCourbestring=value;
+    let datefichier = this.dateCourbestring.substring(8,10) + this.dateCourbestring.substring(5,7)+ this.dateCourbestring.substring(0,4) ;  
+    this.adminService.DownloadLTFile(this.dateCourbe).subscribe(response => {
+			let blob:any = new Blob([response], { type: 'text/csv; charset=utf-8' });
+      fileSaver.saveAs(blob, 'COURBE_MS_LT_'+datefichier+'.csv');
+      console.log('Fichier Courbe de Taux LT téléchargé avec succès !');
+		},err => {
+      console.log('Erreur lors du téléchargement de fichier !');     
+    });
+  }
+
+  DownloadTMPFile(value) {
+    this.dateCourbe=value;
+    this.dateCourbestring=value;
+    let datefichier = this.dateCourbestring.substring(8,10) + this.dateCourbestring.substring(5,7)+ this.dateCourbestring.substring(0,4) ;  
+    this.adminService.DownloadTMPFile(this.dateCourbe).subscribe(response => {
+			let blob:any = new Blob([response], { type: 'text/csv; charset=utf-8' });
+      fileSaver.saveAs(blob, 'TMPJJ'+datefichier+'.csv');
+      console.log('Fichier Taux moyen pondéré téléchargé avec succès!');
+		},err => {
+      console.log('Erreur lors du téléchargement de fichier !');     
+    });
+  }
 }

@@ -2,7 +2,7 @@
   <div>
     <ul class="nav navbar-nav navbar-right" *ngIf="!isAuthenticated()">
       <li class="nav-item">
-        <a href="/login" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+        <a href="/login" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> Connexion</a>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right" *ngIf="isAuthenticated()">
@@ -10,7 +10,7 @@
         <a href="/profile" style="text-transform:uppercase;" class="nav-link"><span class="glyphicon glyphicon-user"></span> {{username}} ( {{role}} )</a>
       </li>
       <li class="nav-item">
-        <a (click)="logOut()" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> LOGOUT</a>
+        <a (click)="logOut()" class="nav-link"><span class="glyphicon glyphicon-off"></span> Déconnexion</a>
       </li>
     </ul>
   </div>
@@ -32,7 +32,7 @@
     <li class="nav-item" [class.active]="router.url==='/user-list'">
       <a href="/user-list" class="nav-link">
         <span class="glyphicon glyphicon-user"></span>
-        <span>User List</span>
+        <span>Utlisateurs</span>
       </a>
     </li>
     <li class="nav-item" [class.active]="router.url==='/cours-bbe'">
@@ -50,7 +50,7 @@
     <li class="nav-item" [class.active]="router.url==='/settings'">
       <a href="/settings" class="nav-link">
         <span class="glyphicon glyphicon-cog"></span>
-        <span>Settings</span>
+        <span>Paramètres</span>
       </a>
     </li>
   </ul>

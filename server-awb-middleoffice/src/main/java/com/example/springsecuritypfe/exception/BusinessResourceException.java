@@ -2,7 +2,10 @@ package com.example.springsecuritypfe.exception;
 
 
 import org.springframework.http.HttpStatus;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public class BusinessResourceException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
@@ -36,27 +39,4 @@ public class BusinessResourceException extends RuntimeException {
         this.status = status;
     }
 
-    public Long getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(Long resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }    
-    
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
-    }
 }

@@ -16,8 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.example.springsecuritypfe.exception.BusinessResourceException;
 import com.example.springsecuritypfe.model.AppUser;
 import com.example.springsecuritypfe.repository.UserRepository;
@@ -36,13 +35,13 @@ public class UserServiceImplTest {
  
     private UserService userService;
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     
     @Before
     public void setup() {
     	userRepository = Mockito.mock(UserRepository.class);
-    	passwordEncoder = Mockito.mock(PasswordEncoder.class);
-    	userService = new UserServiceImpl(userRepository, passwordEncoder);
+    	bCryptPasswordEncoder = Mockito.mock(BCryptPasswordEncoder.class);
+    	userService = new UserServiceImpl(userRepository, bCryptPasswordEncoder);
     }
     
     @Test
@@ -98,8 +97,8 @@ public class UserServiceImplTest {
     	
     	
     	Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userFoundById));
-    	Mockito.when(passwordEncoder.matches(any(String.class), any(String.class))).thenReturn(false);
-    	Mockito.when(passwordEncoder.encode(any(String.class))).thenReturn("newPassword");
+    	Mockito.when(bCryptPasswordEncoder.matches(any(String.class), any(String.class))).thenReturn(false);
+    	Mockito.when(bCryptPasswordEncoder.encode(any(String.class))).thenReturn("newPassword");
     	Mockito.when(userRepository.save((userToUpdate))).thenReturn(userUpdated);
     	AppUser userFromDB = userService.saveOrUpdateUser(userToUpdate);
     	assertNotNull(userFromDB);

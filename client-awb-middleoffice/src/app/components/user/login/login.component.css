@@ -7,13 +7,14 @@
 .register-left{
   text-align: center;
   color: #fff;
-  margin-top: 4%;
+  margin-top: 6%;
 }
 
 .register-right{
   background: #f8f9fa;
   border-top-left-radius: 10% 50%;
   border-bottom-left-radius: 10% 50%;
+  margin-top: 5% ;
 }
 .register-left img{
   margin-top: 5%;
@@ -39,7 +40,7 @@
 .btnRegister{
   box-shadow: 0 5px 15px 0 rgba(0,0,0,0.26);
   height:40px;
-  width:calc(100% - 400px);
+  width:40%;
   display:block;
   margin:auto;
   color: white!important;
@@ -56,6 +57,8 @@
 
 .form-group {
   text-align: center ;
+  align-content: center;
+  width: 100%;
 }
 
 

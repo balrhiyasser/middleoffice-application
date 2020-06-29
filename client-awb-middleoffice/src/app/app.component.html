@@ -1,3 +1,4 @@
-<app-admin-template *ngIf="isAdmin()"></app-admin-template>
-<app-user-template *ngIf="!isAdmin()" ></app-user-template>
+<app-admin-template *ngIf="isAdmin() && isAuthenticated()"></app-admin-template>
+<app-user-template *ngIf="!isAdmin() && isAuthenticated()" ></app-user-template>
+<app-default-template *ngIf="!isAuthenticated()"></app-default-template>
 <router-outlet></router-outlet>

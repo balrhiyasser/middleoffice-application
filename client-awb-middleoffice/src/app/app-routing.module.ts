@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Router, Routes, RouterModule } from '@angular/router';
 import {HomeComponent} from './components/user/home/home.component';
 import {LoginComponent} from './components/user/login/login.component';
-import {RegisterComponent} from './components/admin/register/register.component';
 import {ProfileComponent} from './components/user/profile/profile.component';
 import {DashboardComponent} from './components/admin/dashboard/dashboard.component';
 import {UserListComponent} from './components/admin/user-list/user-list.component';
@@ -23,7 +22,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'profile',
   component: ProfileComponent,
-  canActivate: [AuthGuard]
+  canActivate: [AuthGuard],
+  data: {roles: [Role.ADMIN,Role.USER]}
   },
 
   //admin panel
@@ -31,11 +31,6 @@ const routes: Routes = [
   component: DashboardComponent,
   canActivate: [AuthGuard],
   data: {roles: [Role.ADMIN,Role.USER]}
-  },
-  {path: 'register', 
-  component: RegisterComponent,
-  canActivate: [AuthGuard],
-  data: {roles: [Role.ADMIN]}
   },
   {path: 'user-list',
   component: UserListComponent,

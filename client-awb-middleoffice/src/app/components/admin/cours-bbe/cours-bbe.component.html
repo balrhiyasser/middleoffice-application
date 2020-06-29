@@ -15,17 +15,18 @@
             <form class="form-inline" style="margin-right: 20px;">
               <div class="form-group mx-sm-3">
                 <input type="date" class="form-control" name="date" [ngModel]="BirthDate | date:'yyyy-MM-dd'" #date>
-                <button mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-success" (click)="getcoursList(date.value)">Générer</button>
+                <button mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-success" (click)="getcoursList(date.value)">Rechercher</button>
+                <button mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-success" (click)="generateBBE(date.value)">Générer</button>
                 <div style=" margin-left: 20px;" class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Télécharger
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="http://localhost:8080/download/coursbbe.xlsx?date={{date.value}}">EXCEL</a>
-                    <a class="dropdown-item" href="http://localhost:8080/download/coursbbe.csv?date={{date.value}}">CSV</a>
+                    <a class="dropdown-item" (click)="DownloadEXFile(date.value)">EXCEL</a>
+                    <a class="dropdown-item" (click)="DownloadCSVFile(date.value)">CSV</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="http://localhost:8080/download/BAMFX03.txt?date={{date.value}}">TXT BAM</a>
-                    <a class="dropdown-item" href="http://localhost:8080/download/WAFACASH.txt?date={{date.value}}">TXT WAFACASH</a>
+                    <a class="dropdown-item" (click)="DownloadBAMFile(date.value)">TXT BAM</a>
+                    <a class="dropdown-item" (click)="DownloadWAFAFile(date.value)">TXT WAFACASH</a>
 
                   </div>
                 </div>
@@ -78,43 +79,43 @@
             </ng-container>
 
             <ng-container matColumnDef="midBAM">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Mid BAM</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.midBAM}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Mid BAM</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.midBAM}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="achatClienteleCAL">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Achat Clientele CAL</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.achatClienteleCAL}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Achat Clientele CAL</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.achatClienteleCAL}}</mat-cell>
             </ng-container>
   
             <ng-container matColumnDef="venteClienteleCAL">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Vente Clientele CAL</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.venteClienteleCAL}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Vente Clientele CAL</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.venteClienteleCAL}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="achatinterBAM">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Achat Inter BAM</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.achatinterBAM}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Achat Inter BAM</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.achatinterBAM}}</mat-cell>
             </ng-container>
   
             <ng-container matColumnDef="venteinterBAM">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Vente Inter BAM</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.venteinterBAM}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Vente Inter BAM</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.venteinterBAM}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="rachatinter">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Rachat Inter</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.rachatinter}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Rachat Inter</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.rachatinter}}</mat-cell>
             </ng-container>
   
             <ng-container matColumnDef="venteinter">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Vente Inter</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.venteinter}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Vente Inter</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.venteinter}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="rachatsousdel">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Rachat Sous Del</mat-header-cell>
-              <mat-cell *matCellDef="let cours">{{cours.rachatsousdel}}</mat-cell>
+              <mat-header-cell [hidden]="hideattributes" *matHeaderCellDef mat-sort-header>Rachat Sous Del</mat-header-cell>
+              <mat-cell [hidden]="hideattributes" *matCellDef="let cours">{{cours.rachatsousdel}}</mat-cell>
             </ng-container>
   
 

@@ -1,5 +1,6 @@
 package com.example.springsecuritypfe.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import com.example.springsecuritypfe.model.CourbeBDT;
@@ -14,7 +15,10 @@ public interface CourbeBDTService {
     
     List<CourbeBDT> findByDate(String date);
     
-    //String getTMP(String date) ;
-
-
+    List<CourbeBDT> findByMaturite(Long Maturite) ;
+    
+    List<CourbeBDT> generateBDT(List<CourbeBDT> list) throws ParseException;
+    
+     
+    
 }

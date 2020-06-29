@@ -10,7 +10,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/user/login/login.component';
-import { RegisterComponent } from './components/admin/register/register.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { HomeComponent } from './components/user/home/home.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
@@ -38,11 +37,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from "ngx-spinner";
 import { CourbeBdtComponent } from './components/admin/courbe-bdt/courbe-bdt.component';
 import { ErrorIntercept } from './services/error.interceptor';
 import { ServerDownComponent } from './components/error/server-down/server-down.component';
 import { AuthenticationService } from './services/authentication.service';
 import { TokenIntercept } from './services/token.interceptor';
+import { DefaultTemplateComponent } from './components/template/default-template/default-template.component';
 
 
 
@@ -51,7 +52,6 @@ import { TokenIntercept } from './services/token.interceptor';
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent,
     ProfileComponent,
     HomeComponent,
     DashboardComponent,
@@ -63,7 +63,8 @@ import { TokenIntercept } from './services/token.interceptor';
     CoursBbeComponent,
     SettingsComponent,
     CourbeBdtComponent,
-    ServerDownComponent
+    ServerDownComponent,
+    DefaultTemplateComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +81,7 @@ import { TokenIntercept } from './services/token.interceptor';
     MatPaginatorModule,
     MatSortModule,
     MatProgressBarModule,
+    NgxSpinnerModule,
     MatIconModule,
     ToastrModule.forRoot({
       timeOut: 10000,

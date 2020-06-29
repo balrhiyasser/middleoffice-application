@@ -15,6 +15,8 @@ public interface CourbeLTService {
     
     List<CourbeLT> findByDate(String date) throws ParseException;
     
+    List<CourbeLT> findByMaturite(Long maturite);
+    
     List<CourbeLT> generateCourbeLT(String date) throws ParseException;
     
 
