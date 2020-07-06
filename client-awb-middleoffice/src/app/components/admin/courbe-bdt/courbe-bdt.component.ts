@@ -36,6 +36,7 @@ export class CourbeBdtComponent implements OnInit {
   show: boolean // affichage du champ 'maturité'
   mode: boolean // affichage du bouton 'consulter' et 'extraire'
   showgenerate: boolean // affichage du bouton 'générer'
+  isViewable: boolean
 
   taux: string ;
   dateTaux: string ;
@@ -50,6 +51,7 @@ export class CourbeBdtComponent implements OnInit {
     this.show=true; // le champ maturité n'est pas affiché
     this.mode=false;
     this.showgenerate=false;
+    this.isViewable=false;
   }
 
   ngAfterViewInit(){
@@ -59,6 +61,10 @@ export class CourbeBdtComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getcourbeList(value){
     this.dateCourbe=value;
     this.adminService.getcourbebdt(this.dateCourbe).subscribe(data => {
@@ -66,6 +72,7 @@ export class CourbeBdtComponent implements OnInit {
       this.show=true;
       this.mode=false; 
       this.showgenerate=true;
+      this.isViewable=true;
       this.dataSource.data = data;
     });
   }
@@ -77,6 +84,7 @@ export class CourbeBdtComponent implements OnInit {
       this.dataSource.data = data;
       this.show=false;
       this.mode=true;
+      this.isViewable=true;
       console.log(this.dateCourbe);
     });
   }
@@ -87,6 +95,8 @@ export class CourbeBdtComponent implements OnInit {
       this.dataSourceST.data = data;
       console.log(data);
       this.show=false;
+    },err => {
+      console.log('Erreur ! '+err);     
     });
     if(this.authService.jwtToken){
       this.toastr.info('Traitement en cours ...','Courbe de taux ST',
@@ -104,6 +114,8 @@ export class CourbeBdtComponent implements OnInit {
     this.adminService.generateCourbeLT(this.dateCourbe).subscribe(data => {
       this.dataSourceLT.data = data;
       this.show=false;
+    },err => {
+      console.log('Erreur ! '+err);     
     });
     if(this.authService.jwtToken){
       this.toastr.info('Traitement en cours ...','Courbe de taux LT',
@@ -137,11 +149,6 @@ export class CourbeBdtComponent implements OnInit {
       $("#tmpjj").modal('show');     
     },3500 );
       
-  }
-
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   DownloadSTFile(value) {

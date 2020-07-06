@@ -54,12 +54,12 @@ export class ProfileComponent implements OnInit {
       //this.userList[itemIndex] = this.selectedUser;
       //this.dataSource = new MatTableDataSource(this.userList);
       //console.log(this.dataSource);
-      this.infoMessage = "Informations are updated successfully !";
+      this.infoMessage = "Les informations sont mises à jour avec succès !";
       setTimeout(() => {
         window.location.reload();
       },1500 );
     },err => {
-        this.errorMessage = "Username should be unique for each user !";
+        this.errorMessage = "L'identifiant de l'utilisateur doit être unique !";
         setTimeout(() => {
           window.location.reload();
         },1500 ); 
@@ -69,6 +69,10 @@ export class ProfileComponent implements OnInit {
   logOut(){
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  annuler(){
+    this.show=false;
   }
 
 }

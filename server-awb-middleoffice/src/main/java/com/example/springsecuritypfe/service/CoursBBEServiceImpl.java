@@ -1,28 +1,20 @@
 package com.example.springsecuritypfe.service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.example.springsecuritypfe.model.CoursBBE;
 import com.example.springsecuritypfe.model.Parameter;
 import com.example.springsecuritypfe.repository.CoursBBERepository;
-
+import com.example.springsecuritypfe.util.APIUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class CoursBBEServiceImpl implements CoursBBEService {
+	
+	APIUtil apiutil = new APIUtil();
 	
 	@Autowired
 	private CoursBBERepository coursRepository;
@@ -32,7 +24,6 @@ public class CoursBBEServiceImpl implements CoursBBEService {
 	
 	@Autowired
 	private CoursBBEService coursbbeService;
-	
 	
 	@Override
 	public CoursBBE saveCours(CoursBBE cours) {
@@ -49,7 +40,12 @@ public class CoursBBEServiceImpl implements CoursBBEService {
         return coursRepository.findAll();
 	}
 	
-
+	@Override
+	public List<CoursBBE> findOnlyByDate(String date) {
+		return coursRepository.findByDate(date);
+	}
+ 
+	
 	@Override
 	public List<CoursBBE> findByDate(String date) {
 		
@@ -58,44 +54,12 @@ public class CoursBBEServiceImpl implements CoursBBEService {
 			log.info("Les cours de billet correspondant à la date "+date+" existent déjà dans la base de données.");
 			return courslist;
 		} else {
-			return callgetlistbbe(date);
-		}
-	}
-	
-	public List<CoursBBE> callgetlistbbe(String date) {
-		
-		List<CoursBBE> list = new ArrayList<CoursBBE>();
-		
-		log.info("Récupération des cours de billet de banque");
-		log.info("Appel à l'API Bank Al Maghrib ... ");
-		
-		try {
-		
-		HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_JSON);	
-	    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-	      
-        headers.set("Ocp-Apim-Subscription-Key", "b012767065a84ae3a106f1f138f125d6");
-        
-	    HttpEntity<String> entity = new HttpEntity<String>(headers);
-		
-		String url = String.format("https://api.centralbankofmorocco.ma/cours/Version1/api/CoursBBE?date=%s", date);
-		
-		RestTemplate restTemplate = new RestTemplate();
-		
-		list = Arrays.asList(restTemplate.exchange(url, HttpMethod.GET, entity, CoursBBE[].class).getBody());
-		
-		coursbbeService.saveCours(list);
-		
-		log.info("Les cours de billet de banque correspondants à la date "+date+" sont bien enregistrées dans la base de données.");
-		
-		} catch (Exception e) {
-			
-			log.info("Erreur lors de l'appel à l'API Bank Al Maghrib"+e);
+			courslist=  apiutil.callgetlistbbe(date, parameterService.findByCle("KEY_BBE").getValeur(), parameterService.findByCle("URL_BBE").getValeur());
+			coursbbeService.saveCours(courslist);
+			log.info("Les cours de billet de banque correspondants à la date "+date+" sont bien enregistrées dans la base de données.");
+			return courslist ;
 
 		}
-		
-		return list ;
 		
 	}
 	
@@ -127,15 +91,6 @@ public class CoursBBEServiceImpl implements CoursBBEService {
     	
     	return res;
 	}
-		
 
-    public Iterable<CoursBBE> list() {
-        return coursRepository.findAll();
-    }
-
-
-    public Iterable<CoursBBE> save(List<CoursBBE> listcoursbbe) {
-    	return coursRepository.save(listcoursbbe);
-    }
-	 
+	
 }

@@ -9,34 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-	
-	/*"achatClientele": 10.888,
-    "date": "2020-03-25T08:30:00",
-    "libDevise": "GIP",
-    "uniteDevise": 1,
-    "venteClientele": 12.654 */
+
 	
 	@Data
 	@Entity
 	@Table(name="coursbbe")
 	public class CoursBBE  {
 		
-		/*
-		•	Libelle devise
-		•	Date
-		•	Unité devise
-		•	Achat clientèle BAM
-		•	Vente clientèle BAM
-		•	Mid BAM : (Achat clientèle BAM + Vente clientèle BAM)/2 (arrondi à 4 chiffres après la virgule)
-		•	Achat aux intermédiaires BAM : Mid BAM *(1-commissionOfficeChange)
-		•	Vente aux intermédiaires BAM : Mid BAM *(1+commisionOfficeChange)
-		•	Achat Clientèle : Mid BAM *(1-commissionAWB)
-		•	Vente Clientèle : Mid BAM *(1+commisionAWB)
-		•	Vente aux intermédiaires : Mid BAM 
-		•	Rachat aux intermédiaires : Achat aux intermédiaires BAM 
-		•	Rachat aux Sous délégataires : Mid BAM *(1-commisionAWBDelegataire)
-		*/
-
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
@@ -79,7 +58,6 @@ import lombok.Data;
 
 	    @Column(name="date")
 	    private String date;
-	    
 	    
 	    // Getters / Setters
 	    
@@ -231,7 +209,6 @@ import lombok.Data;
 		public void setUniteDevise(Integer uniteDevise) {
 			this.uniteDevise = uniteDevise;
 		}
-		
-		
+	    
 		
 }

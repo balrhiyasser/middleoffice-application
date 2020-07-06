@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.springsecuritypfe.model.AppUser;
 import com.example.springsecuritypfe.model.Parameter;
-import com.example.springsecuritypfe.model.Role;
 import com.example.springsecuritypfe.model.StringResponse;
 import com.example.springsecuritypfe.service.CourbeBDTService;
 import com.example.springsecuritypfe.service.CourbeLTService;
@@ -57,6 +56,11 @@ public class AdminController { // NB: pas de logique métier dans le contrôleur
     	 return new ResponseEntity<>(coursbbeService.findByDate(date), HttpStatus.OK);
     }
     
+    @GetMapping("/coursbbe/find")
+    public ResponseEntity<?> findlistbbe(@RequestParam("dateCourbe") String date) {
+    	 return new ResponseEntity<>(coursbbeService.findOnlyByDate(date), HttpStatus.OK);
+    }
+    
     //==================================Générer le traitement de calcul de cours de billet==================================
 
     
@@ -74,6 +78,11 @@ public class AdminController { // NB: pas de logique métier dans le contrôleur
     public ResponseEntity<?> getlistbdt(@RequestParam("dateCourbe") String date) {
     	log.info("Recherche des courbes de taux correspondants à la date " + date +" ..." );
     	return new ResponseEntity<>(courbebdtService.findByDate(date), HttpStatus.OK);
+    }
+    
+    @GetMapping("/courbebdt/find")
+    public ResponseEntity<?> findlistbdt(@RequestParam("dateCourbe") String date) {
+    	 return new ResponseEntity<>(courbebdtService.findOnlyByDate(date), HttpStatus.OK);
     }
     
   //==================================Générer le traitement de calcul de courbe de taux==================================
@@ -110,7 +119,7 @@ public class AdminController { // NB: pas de logique métier dans le contrôleur
     
     @PostMapping("/api/admin/registration")
     public ResponseEntity<?> register(@RequestBody AppUser user){
-        user.setRole(Role.USER); //default role.
+        //user.setRole(Role.USER); //default role.
         return new ResponseEntity<>(userService.saveOrUpdateUser(user), HttpStatus.CREATED);
     }
     

@@ -17,13 +17,9 @@ public interface CoursBBEService {
     
     List<CoursBBE> findByDate(String date);
     
+    List<CoursBBE> findOnlyByDate(String date);
+    
     List<CoursBBE> generateBBE(List<CoursBBE> list) throws ParseException;
-
-
-
-
-	
-	
 	
 
 }

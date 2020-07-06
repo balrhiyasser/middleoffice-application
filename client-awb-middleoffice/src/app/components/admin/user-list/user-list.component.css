@@ -16,11 +16,27 @@ table {
   width: 120px;
 }
 
+.mat-row:hover {
+  background-color:rgb(249, 181, 91);
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+  margin-bottom: -15px;
+}
+
 .jumbotron{
   background: -webkit-linear-gradient(left, #ff8308, #000) no-repeat center center fixed; 
-  ;
   margin-bottom: -50px;
   height: 700px;
+}
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (min-width: 200px) {
+  mat-table {
+    width: 100px;
+  }
 }
 
 

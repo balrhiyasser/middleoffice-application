@@ -16,6 +16,26 @@ table {
   width: 120px;
 }
 
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+  margin-bottom: -15px;
+}
+
+mat-cell:nth-child(1),
+mat-header-cell:nth-child(1) {
+    flex: 0 0 30%;
+}
+
+mat-cell:nth-child(2),
+mat-header-cell:nth-child(2) {
+    flex: 0 0 60%;
+}
+
+.mat-row:hover {
+  background-color:rgb(249, 181, 91);
+}
+
 .jumbotron{
   background: -webkit-linear-gradient(left, #ff8308, #000) no-repeat center center fixed; 
   ;

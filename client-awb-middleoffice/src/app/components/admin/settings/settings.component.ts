@@ -16,7 +16,7 @@ export class SettingsComponent implements OnInit {
 
   parametersList: Array<Parameter>;
   dataSource: MatTableDataSource<Parameter> = new MatTableDataSource();
-  displayedColumns: string[] = ['id', 'cle', 'valeur', 'action'];
+  displayedColumns: string[] = ['cle', 'valeur', 'action'];
   selectedParameter: Parameter = new Parameter();
   errorMessage: string;
   infoMessage: string;
@@ -33,6 +33,10 @@ export class SettingsComponent implements OnInit {
   ngAfterViewInit(){
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   findAllParameters(){
@@ -64,11 +68,11 @@ export class SettingsComponent implements OnInit {
     this.adminService.createParameter(this.selectedParameter).subscribe(data => {
       this.parametersList.push(data);
       this.dataSource = new MatTableDataSource(this.parametersList);
-      this.infoMessage = "Parameter is created successfully !";
+      this.infoMessage = "Le paramètre est ajouté avec succès !";
       $('#parameterModal').modal('hide');
     },err => {
       $('#parameterModal').modal('hide');
-      this.errorMessage = "Parameter is already exist !";
+      this.errorMessage = "Une erreur inattendue s'est produite !";
     });
   }
 
@@ -77,10 +81,10 @@ export class SettingsComponent implements OnInit {
       let itemIndex = this.parametersList.findIndex(item => item.id == this.selectedParameter.id);
       this.parametersList[itemIndex] = this.selectedParameter;
       this.dataSource = new MatTableDataSource(this.parametersList);
-      this.infoMessage = "Parameter is updated successfully !";
+      this.infoMessage = "Le paramètre est mise à jour avec succès !";
       $('#parameterModal').modal('hide');
     },err => {
-      this.errorMessage = "Unexpected error occurred.";
+      this.errorMessage = "Une erreur inattendue s'est produite !";
     });
   }
 
@@ -96,10 +100,10 @@ export class SettingsComponent implements OnInit {
         this.parametersList.splice(itemIndex, 1);
       }
       this.dataSource = new MatTableDataSource(this.parametersList);
-      this.infoMessage = "Paramter is deleted successfully !";
+      this.infoMessage = "Paramètre supprimé avec succès!";
       $('#deleteModal').modal('hide');
     },err => {
-      this.errorMessage = "Unexpected error occurred.";
+      this.errorMessage = "Une erreur inattendue s'est produite !";
     });
   }
 

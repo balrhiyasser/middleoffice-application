@@ -1,30 +1,28 @@
 package com.example.springsecuritypfe.service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.example.springsecuritypfe.exception.BusinessResourceException;
 import com.example.springsecuritypfe.model.CourbeBDT;
 import com.example.springsecuritypfe.model.CourbeST;
 import com.example.springsecuritypfe.repository.CourbeSTRepository;
+import com.example.springsecuritypfe.util.DateUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class CourbeSTServiceImpl implements CourbeSTService {
+	
+	DateUtil dateutil = new DateUtil() ;
 	
 	@Autowired
 	private CourbeSTRepository courbeRepository;
@@ -55,7 +53,7 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 	}
 
 	@Override
-	public List<CourbeST> findByMaturite(Long maturite) {
+	public List<CourbeST> findByMaturite(Integer maturite) {
 		return courbeRepository.findByMaturite(maturite);	
 	}
 	
@@ -72,28 +70,14 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 		}
 	}
 	
-	 Long GetMaturite(String DateEcheance, String DateValeur) throws ParseException {
-		
-		Date dateEcheance=new SimpleDateFormat("yyyy-MM-dd").parse(DateEcheance);
-			
-		Date dateValeur=new SimpleDateFormat("yyyy-MM-dd").parse(DateValeur);
-
-		DateTime dt1 = new DateTime(dateEcheance);
-		
-		DateTime dt2 = new DateTime(dateValeur);
-					    			
-		return (long)Days.daysBetween(dt2, dt1).getDays() ;
-		
-	}
-	
 	@Override
-	public List<CourbeST> generateCourbeST(String date) throws ParseException {
+	public List<CourbeST> generateCourbeST(String date)  throws BusinessResourceException {
 		
 		log.info("Génération des courbes de taux court terme ...");
 		
 		List<CourbeBDT> bdtlist = courbebdtService.findByDate(date);
 		
-		Long maturiteltcourbe = 0L ;
+		int maturiteltcourbe = 0 ;
 		
 		Collections.sort(bdtlist, new Comparator<CourbeBDT>() {
 		    @Override
@@ -102,10 +86,7 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 		}});
 			
 		for (int i = 0; i < bdtlist.size()+1; i++) {	
-			
-			if( bdtlist.get(i).getMaturite() > 365 ) {
-				maturiteltcourbe = bdtlist.get(i).getMaturite(); break ; 
-			}	
+			if( bdtlist.get(i).getMaturite() > 365 ) { maturiteltcourbe = bdtlist.get(i).getMaturite(); break ; }	
 		}
 		
 		List<CourbeST> stlist = new ArrayList<CourbeST>();
@@ -120,18 +101,26 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 				CourbeST element = new CourbeST() ;
 				
 				if(i==0) {
-					
 					String tmp = tauxService.getTMP((bdtlist.get(i).getDateCourbe())).replace(",", ".");
+					
+					if(tmp=="" && dateutil.datesdifference(dateutil.datetostring(new Date()), date)<10L) {
+						System.out.println("la date est supérieur à 22-06-2020");
+						throw new BusinessResourceException("NoConnection", "votre connexion internet est instable", HttpStatus.REQUEST_TIMEOUT);
+					}
+
+					if(dateutil.datesdifference(dateutil.datetostring(new Date()), date)>10L) {
+						System.out.println("la date est inférieur à 22-06-2020");
+					}
 					element.setDateCourbe(date);
 					if(tmp=="") { element.setTaux(null);}
 					else { element.setTaux(Double.parseDouble(tmp)); }
-					element.setMaturite(1L);
+					element.setMaturite(1);
 					stlist.add(i, element);
 					
 					//log.info("first element "+element.getDateCourbe()+" | "+element.getTaux()+" | "+element.getMaturite());	
 				}
 				else {	
-					long maturite = GetMaturite(bdtlist.get(i-1).getDateEcheance(),bdtlist.get(i-1).getDateValeur());
+					int maturite = dateutil.datesdifference(bdtlist.get(i-1).getDateEcheance(),bdtlist.get(i-1).getDateValeur());
 					if(maturite<365) {
 						element.setDateCourbe((bdtlist.get(i-1).getDateCourbe()));
 						element.setTaux(bdtlist.get(i-1).getTmp());;
@@ -186,39 +175,4 @@ public class CourbeSTServiceImpl implements CourbeSTService {
 		
 		return stlist;		
 	}
-
-	@Override
-	public String getTMP(String date) {
-		
-		String dateformatted = date.substring(8,10)+"/"+date.substring(5,7)+"/"+date.substring(0,4) ;
-		
-		final String url = "http://www.bkam.ma/Marches/Principaux-indicateurs/Marche-monetaire/Marche-monetaire-interbancaire";
-		
-        String taux = "" ;
-        
-        try {
-
-            final Document document = Jsoup.connect(url).proxy(null).get();
-            
-            for (Element row : document.select("table.dynamic_contents_ref_5 tr")) {
-            	
-            	if(row.select("td:nth-of-type(1)").text().equals(dateformatted)) {	
-            		taux = taux+row.select("td:nth-of-type(2)").text().substring(0,5);
-            		System.out.println(taux);
-            		break;
-            	}
-            }
-        }
-            
-        catch (Exception ex) {
-        	
-        	ex.printStackTrace();
-        	
-        }
-        
-        System.out.println("Taux moyen pondéré récupéré pour le jour : "+dateformatted+" est : "+ taux);
-        
-		return taux;
-	}
-	
 }

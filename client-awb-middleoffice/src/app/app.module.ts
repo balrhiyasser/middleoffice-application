@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 /* Angular material 8 */
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
@@ -40,10 +40,12 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { CourbeBdtComponent } from './components/admin/courbe-bdt/courbe-bdt.component';
 import { ErrorIntercept } from './services/error.interceptor';
-import { ServerDownComponent } from './components/error/server-down/server-down.component';
 import { AuthenticationService } from './services/authentication.service';
 import { TokenIntercept } from './services/token.interceptor';
 import { DefaultTemplateComponent } from './components/template/default-template/default-template.component';
+/*import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr, 'fr');*/
 
 
 
@@ -63,7 +65,6 @@ import { DefaultTemplateComponent } from './components/template/default-template
     CoursBbeComponent,
     SettingsComponent,
     CourbeBdtComponent,
-    ServerDownComponent,
     DefaultTemplateComponent
   ],
   imports: [
@@ -103,6 +104,9 @@ import { DefaultTemplateComponent } from './components/template/default-template
       useClass: TokenIntercept,
       multi: true
     },
+    /*{ provide: LOCALE_ID, 
+      useValue: "fr-FR" 
+    },*/
     [AuthenticationService]
   ],
   bootstrap: [AppComponent],

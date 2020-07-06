@@ -29,12 +29,12 @@ public class CourbeST {
     private String dateEcheance;
     
     @Column(name="maturite")
-    private Long maturite;  
+    private Integer maturite;  
 
     @Column(name="taux")
     private Double taux;
 
-	public CourbeST(String dateCourbe, Long maturite, Double taux) {
+	public CourbeST(String dateCourbe, Integer maturite, Double taux) {
 		super();
 		this.dateCourbe = dateCourbe;
 		this.maturite = maturite;

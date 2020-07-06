@@ -26,6 +26,9 @@ export class CoursBbeComponent implements OnInit {
   displayedColumns: string[] = ['achatClientele', 'venteClientele', 'midBAM', 'achatClienteleCAL', 'venteClienteleCAL', 'achatinterBAM', 'venteinterBAM', 'rachatinter', 'venteinter', 'rachatsousdel', 'libDevise', 'uniteDevise', 'date'];
   registerForm : FormGroup;
   hideattributes: boolean;
+  showgenerate: boolean; //afficher bouton générer
+  mode: boolean; //afficher bouton extraire
+  isViewable: boolean;
 
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -36,6 +39,9 @@ export class CoursBbeComponent implements OnInit {
  
 	ngOnInit() {
     this.hideattributes=true;
+    this.showgenerate=false;
+    this.mode=false;
+    this.isViewable=false;
   }
 
   ngAfterViewInit(){
@@ -51,6 +57,9 @@ export class CoursBbeComponent implements OnInit {
       this.dataSource.data = data;
       console.log(this.date);
     });
+    this.mode=false;
+    this.showgenerate=true;
+    this.isViewable=true;
   }
 
   generateBBE(){
@@ -59,6 +68,8 @@ export class CoursBbeComponent implements OnInit {
       console.log(this.date);
     });
     this.hideattributes=false;
+    this.mode=true;
+    this.isViewable=true;
   }
 
   DownloadCSVFile(value) {

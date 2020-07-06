@@ -30,7 +30,7 @@ import lombok.Data;
 	    private String dateCourbe;
 	    
 	    @Column(name="maturite")
-	    private Long maturite;  
+	    private Integer maturite;  
 
 	    @Column(name="tmp")
 	    private Double tmp;

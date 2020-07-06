@@ -26,16 +26,21 @@ export class ErrorIntercept implements HttpInterceptor {
                     let errorMessage = '';
                     if (error.error instanceof ErrorEvent) {
                         // client-side error
-                        errorMessage = `Error: ${error.error.message}`;
+                        errorMessage = `Erreur: ${error.error.message}`;
                     } else {
                         // server-side error
                         if (error.message.includes("Unknown Error")){
                             this.authService.logout();
-                            this.toastr.error('Oops ! Backend Server is down or temporarily unavailable.');
+                            this.toastr.error('Le serveur est en panne ou temporairement indisponible.','Oops !');
                             this.router.navigate(['/login']);                        
-                        }
+                        } 
                         else {
-                            errorMessage = `Error Status: ${error.status}\nMessage: ${error.message}`;
+                            if(error.status==408){
+                                this.toastr.error('Oups ! vérifier votre connexion internet.');
+                            }
+                            else {
+                                errorMessage = `Erreur Status: ${error.status}\nMessage: ${error.message}`;
+                            }
                         }
                     }
                     console.log(errorMessage);

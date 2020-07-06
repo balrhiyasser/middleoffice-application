@@ -31,9 +31,21 @@ export class AdminService {
   headers: this.headers});
   }
 
+  findcoursbbe(date): Observable<any> {
+    const params = new HttpParams().set('dateCourbe', date);
+    return this.http.get("http://localhost:8080/coursbbe/find", {params,
+  headers: this.headers});
+  }
+
   getcourbebdt(date): Observable<any> {
     const params = new HttpParams().set('dateCourbe', date);
     return this.http.get("http://localhost:8080/courbebdt", {params,
+  headers: this.headers});
+  }
+
+  findcourbebdt(date): Observable<any> {
+    const params = new HttpParams().set('dateCourbe', date);
+    return this.http.get("http://localhost:8080/courbebdt/find", {params,
   headers: this.headers});
   }
 

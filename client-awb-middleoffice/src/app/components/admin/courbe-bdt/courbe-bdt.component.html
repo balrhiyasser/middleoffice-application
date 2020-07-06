@@ -37,6 +37,12 @@
             </div>  
           </div>
           <div class="card-body">
+
+            <mat-form-field appearance="outline" color="warn" *ngIf="isViewable">
+              <mat-label>Filter</mat-label>
+              <input (keyup)="applyFilter($event.target.value)" matInput >
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
   
             <mat-table [dataSource]="dataSource" matSort>
               
@@ -45,7 +51,7 @@
                 <mat-cell *matCellDef="let courbe">{{courbe.dateEcheance}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="maturite">
-                <mat-header-cell [hidden]="show"  *matHeaderCellDef mat-sort-header>Maturité (/jours)</mat-header-cell>
+                <mat-header-cell [hidden]="show"  *matHeaderCellDef mat-sort-header>Maturité (jours)</mat-header-cell>
                 <mat-cell [hidden]="show"  *matCellDef="let courbe">{{courbe.maturite}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="dateValeur">
@@ -64,7 +70,7 @@
               </ng-container>
     
               <ng-container matColumnDef="volume">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Volume</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Volume (millions de dirhams)</mat-header-cell>
                 <mat-cell *matCellDef="let courbe">{{courbe.volume}}</mat-cell>
               </ng-container>
     
@@ -113,7 +119,7 @@
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
            
         </div>
@@ -150,7 +156,7 @@
 
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
       </div>
@@ -182,7 +188,7 @@
               </table>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
       </div>

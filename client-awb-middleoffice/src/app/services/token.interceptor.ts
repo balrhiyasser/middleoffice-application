@@ -25,9 +25,9 @@ export class TokenIntercept implements HttpInterceptor {
         let jwtHelper=new JwtHelperService();
         if (jwtToken != null && jwtHelper.isTokenExpired(jwtToken)) {
           this.authService.logout();
-          this.toastr.error('Session Timed Out! Please Login');
+          this.toastr.error('Veuillez vous connecter','Session expirée ! ');
           this.router.navigate(['/login']);
-          return throwError("Session Timed Out");
+          return throwError("Session expirée !");
         } else {
     
           const authRequest = request.clone({

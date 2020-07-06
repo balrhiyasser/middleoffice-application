@@ -21,7 +21,6 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 	
-
     private UserRepository userRepository;
     
     private BCryptPasswordEncoder bCryptPasswordEncoder; 	//It will be provided on WebSecurityConfig as @Bean
@@ -88,6 +87,8 @@ public class UserServiceImpl implements UserService {
 				log.info("Modification des données d'un utilisateur en cours ...");
 				
 				Optional<AppUser> userFromDB = findUserById(user.getId());
+				
+				System.out.println(userFromDB.get().getPassword()+"//"+user.getPassword());
 								
 				if(! bCryptPasswordEncoder.matches(user.getPassword(), userFromDB.get().getPassword())) {
 					user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));  // MAJ du mot de passe s'il a été modifié
@@ -95,7 +96,10 @@ public class UserServiceImpl implements UserService {
 				else {
 					user.setPassword(userFromDB.get().getPassword()); //Sinon, on remet le password déjà haché
 				}
+				System.out.println(userFromDB.get().getPassword()+"//"+user.getPassword());
 			}
+			
+
 			
 			AppUser result = userRepository.save(user);
 			log.info("L'utilisateur est bien enregistré.");

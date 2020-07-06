@@ -1,16 +1,48 @@
 
-<!-- Page Content -->
-<div class="register" style="margin-left:90px">
+<div class="jumbotron" style="margin-left:90px">
 
-  <!-- Jumbotron Header -->
-  <header class="jumbotron">
-    <h1 class="display-3 text-center" style="margin-bottom: 20px;">Bonjour</h1>
-    <div *ngIf="isAdmin()" >
-      <p class="lead">le nombre d'utilisateurs est  <strong>{{userCount}}</strong>.</p>
-    
-    <a href="/user-list" class="btn btn-warning btn-lg btn-custom-link">Details</a>
-  </div>
-  </header>
+    <mat-card class="alert alert-dark" style="text-align: center;">
+      <p style="font-size: large;"><strong>{{today | date:'fullDate'}}</strong></p>
+      <p style="font-size: large;"><strong>{{time}}</strong></p>
+    </mat-card>
+
+    <div class="card-deck" style="justify-content: center;">
+      <mat-card class="col-md-5 example-card alert-primary">
+        <mat-card-header>
+          <mat-card-title>Cours des billets de banque quotidiennes</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div [ngClass]="(recupbbemessage=='Bien récupérée')?'alert alert-success':'alert alert-danger'">
+            <strong>{{recupbbemessage}}</strong>
+          </div>
+          <div [ngClass]="(generatebbemessage=='Bien générée')?'alert alert-success':'alert alert-danger'">
+            <strong>{{generatebbemessage}}</strong>
+          </div>
+        </mat-card-content>
+        <mat-card-actions class="text-right">
+          <button [routerLink]="'/cours-bbe'" mat-button>CONSULTER</button>
+        </mat-card-actions>
+      </mat-card>
+  
+      <mat-card class="col-md-5 example-card alert-primary">
+        <mat-card-header >
+          <mat-card-title>Courbes des taux quotidiennes</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div [ngClass]="(recupbdtmessage=='Bien récupérée')?'alert alert-success':'alert alert-danger'">
+            <strong>{{recupbdtmessage}}</strong>
+          </div>
+          <div [ngClass]="(generatebdtmessage=='Bien générée')?'alert alert-success':'alert alert-danger'">
+            <strong>{{generatebdtmessage}}</strong>
+          </div>
+        </mat-card-content>
+        <mat-card-actions class="text-right">
+          <button [routerLink]="'/courbe-bdt'" mat-button>CONSULTER</button>
+        </mat-card-actions>
+      </mat-card>
+ 
+    </div>
+  
 
 </div>
 

@@ -40,8 +40,8 @@ public class ParameterServiceImpl implements ParameterService {
 	    }
 
 		@Override
-		public Parameter findByCle( String cle) {
-	        return parameterRepository.findByCle(cle).orElse(null);
+		public Parameter findByCle(String cle) {
+	        return parameterRepository.findByCle(cle);
 		}
 
 

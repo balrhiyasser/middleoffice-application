@@ -12,7 +12,6 @@ import {Role} from './model/role';
 import { CoursBbeComponent } from './components/admin/cours-bbe/cours-bbe.component';
 import { SettingsComponent } from './components/admin/settings/settings.component';
 import { CourbeBdtComponent } from './components/admin/courbe-bdt/courbe-bdt.component';
-import { ServerDownComponent } from './components/error/server-down/server-down.component';
 
 const routes: Routes = [
   //Main page
@@ -55,8 +54,7 @@ const routes: Routes = [
 
   //error pages
   {path: '404', component: NotFoundComponent},
-  {path: '401', component: UnathorizedComponent},
-  {path: '503', component: ServerDownComponent},
+  {path: '401', component: UnathorizedComponent}
 ];
 
 @NgModule({

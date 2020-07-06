@@ -23,6 +23,15 @@
     justify-content: center;
   }
 
+  .mat-row:hover {
+    background-color:rgb(249, 181, 91);
+  }
+
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
   th, td {
     text-align: center;
     width: 50%;

@@ -1,12 +1,12 @@
 <div class="jumbotron">
   <div class="alert alert-danger" style="margin-left: 90px;" *ngIf="errorMessage">
-    <strong>Error!</strong> {{errorMessage}}
+    <strong>Erreur !</strong> {{errorMessage}}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="alert alert-success" style="margin-left: 90px;" *ngIf="infoMessage">
-    <strong>Successful!</strong> {{infoMessage}}
+    <strong>Succès !</strong> {{infoMessage}}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -17,42 +17,45 @@
       <div class="card-header">
         <div class="row">
           <div class="col col-xs-6">
-            <h3 class="panel-title">Settings</h3>
+            <h3 class="panel-title">Paramètres</h3>
           </div>
           <div class="col col-xs-6 text-right">
-            <button type="button" class="btn btn-primary" (click)="createNewParameterRequest()">Create New Parameter</button>
+            <button type="button" class="btn btn-warning" (click)="createNewParameterRequest()">Ajouter un paramètre</button>
           </div>
         </div>
       </div>
 
       <div class="card-body">
-        <table mat-table [dataSource]="dataSource" matSort>
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Parameter Id</th>
-            <td mat-cell *matCellDef="let element">{{element.id}}</td>
-          </ng-container>
+
+        <mat-form-field appearance="outline" color="warn">
+          <mat-label>Filtrer</mat-label>
+          <input (keyup)="applyFilter($event.target.value)" matInput >
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-table [dataSource]="dataSource" matSort>
 
           <ng-container matColumnDef="cle">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Clé</th>
-            <td mat-cell *matCellDef="let element">{{element.cle}}</td>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Clé</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.cle}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="valeur">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valeur</th>
-            <td mat-cell *matCellDef="let element">{{element.valeur}}</td>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Valeur</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.valeur}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
-            <td mat-cell *matCellDef="let element" style="width:140px;">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Actions</mat-header-cell>
+            <mat-cell *matCellDef="let element">
               <a class="btn btn-warning custom-btn-link" (click)="editParameterRequest(element)"><em class="glyphicon glyphicon-pencil"></em></a>
               <a class="btn btn-danger custom-btn-link" (click)="deleteParameterRequest(element)"><em class="glyphicon glyphicon-trash"></em></a>
-            </td>
+            </mat-cell>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
         <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
@@ -63,28 +66,26 @@
 <div class="modal fade" id="parameterModal" #parameterModal tabIndex="-1" role="dialog" aria-labelledby="parameterModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form name="form-parameter-update" (ngSubmit)="f.form.valid && saveParameter()" #f="ngForm" novalidate>
+      <form name="form-parameter-update" ngNativeValidate (ngSubmit)="saveParameter()" #f="ngForm" >
         <div class="modal-header">
-          <h5 class="modal-title">Parameter Details</h5>
+          <h5 class="modal-title">Informations paramètre</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
 
         <div class="modal-body">
-          <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !cle.valid }">
+          <div class="form-group">
             <label for="cle">Clé</label>
             <input type="text" class="form-control input-text-custom" id="cle" name="cle" [(ngModel)]="selectedParameter.cle" #cle="ngModel" required />
-            <div *ngIf="f.submitted && !cle.valid" class="help-block">Parameter name is required.</div>
           </div>
-          <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !valeur.valid }">
+          <div class="form-group">
             <label for="valeur">Valeur</label>
             <input type="text" class="form-control input-text-custom" id="valeur" name="valeur" [(ngModel)]="selectedParameter.valeur" #valeur="ngModel" required />
-            <div *ngIf="f.submitted && !valeur.valid" class="help-block">Value is required.</div>
           </div>
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
       </form>
     </div>
@@ -100,11 +101,11 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          Are you sure to delete <strong>{{selectedParameter.cle}}</strong>?
+          Êtes-vous sûr de vouloir supprimer le paramètre <strong>{{selectedParameter.cle}}</strong>?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger" (click)="deleteParameter()">I'm sure.</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-danger" (click)="deleteParameter()">Oui</button>
         </div>
     </div>
   </div>

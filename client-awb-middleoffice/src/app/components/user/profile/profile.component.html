@@ -23,7 +23,7 @@
                     <div *ngIf="!show">
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Username</label>
+                                <label>Identifiant</label>
                             </div>
                             <div class="col-md-6">
                                 <p>{{user.username}}</p>
@@ -47,7 +47,7 @@
                         </div>   
                     </div>
                     <div *ngIf="show">
-                        <form name="form-user-update" (ngSubmit)="f.form.valid && editUser()" #f="ngForm" novalidate> 
+                        <form name="form-user-update" ngNativeValidate (ngSubmit)="editUser()" #f="ngForm"> 
                                 <div class="alert alert-danger" *ngIf="errorMessage">
                                 <strong>Error !</strong> {{errorMessage}}
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -63,13 +63,10 @@
                                 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Username</label>
+                                        <label>Identifiant</label>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <input type="text" name="username" class="form-control" [(ngModel)]="selectedUser.username" #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required>
-                                        <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
-                                            <div *ngIf="username.errors.required">A valid username is required</div>
-                                        </div>
+                                        <input type="text" name="username" class="form-control" [(ngModel)]="selectedUser.username" #username="ngModel" required>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -77,10 +74,7 @@
                                         <label>Nom & Prénom</label>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <input type="text" name="name" class="form-control" [(ngModel)]="selectedUser.name" #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required>
-                                        <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
-                                            <div *ngIf="name.errors.required">A valid name is required</div>
-                                        </div>
+                                        <input type="text" name="name" class="form-control" [(ngModel)]="selectedUser.name" #name="ngModel" required>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -88,28 +82,21 @@
                                         <label>Email</label>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <input type="text" name="email" class="form-control" [(ngModel)]="selectedUser.email" #email="ngModel" [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" required email>
-                                        <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
-                                            <div *ngIf="email.errors.required">Email is required</div>
-                                            <div *ngIf="email.errors.email">Email must be a valid email address</div>
-                                        </div>
+                                        <input type="email" name="email" class="form-control" [(ngModel)]="selectedUser.email" #email="ngModel" required email>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Password</label>
+                                        <label>Mot de passe</label>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <input type="password" name="password" class="form-control" [(ngModel)]="selectedUser.password" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required>
-                                        <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
-                                            <div *ngIf="password.errors.required">Password is required</div>
-                                        </div>
+                                        <input type="password" name="password" class="form-control" [(ngModel)]="selectedUser.password" #password="ngModel" required>
                                     </div>
                                 </div> 
 
                                 <div style="margin-top: 20px;">
-                                    <button style="margin-left: 10px; width: 125px" type="submit" class="btn btn-secondary">Save Changes</button>
-                                    <button style="margin-left: 20px; width: 125px" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button style="margin-left: 10px; width: 125px" type="submit" class="btn btn-secondary">Enregistrer</button>
+                                    <button style="margin-left: 20px; width: 125px" (click)="annuler()" type="button" class="btn btn-secondary">Annuler</button>
                                 </div>
                                  
 

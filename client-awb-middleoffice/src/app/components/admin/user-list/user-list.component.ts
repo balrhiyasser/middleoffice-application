@@ -35,6 +35,10 @@ export class UserListComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   findAllUsers(){
     this.adminService.findAllUsers().subscribe(data => {
       this.userList = data;
@@ -51,15 +55,16 @@ export class UserListComponent implements OnInit {
   }
 
   editUser(){
+    console.log('salam');
     this.adminService.updateUser(this.selectedUser).subscribe(data => {
       console.log('salam');
       let itemIndex = this.userList.findIndex(item => item.id == this.selectedUser.id);
       this.userList[itemIndex] = this.selectedUser;
       this.dataSource = new MatTableDataSource(this.userList);
-      this.infoMessage = "Informations are updated successfully !";
+      this.infoMessage = "Les informations sont modifiées avec succès !";
       $("#userModal").modal('hide');
     },err => {
-        this.errorMessage = "Username should be unique for each user !";
+        this.errorMessage = "L'identifiant de l'utilisateur doit être unique !";
         $("#userModal").modal('hide');
         setTimeout(() => {
           window.location.reload();
@@ -76,16 +81,16 @@ export class UserListComponent implements OnInit {
   createUser(){
     this.adminService.register(this.user).subscribe(data => {
       console.log('salam');
-      let itemIndex = this.userList.findIndex(item => item.id == this.selectedUser.id);
-      this.userList[itemIndex] = this.selectedUser;
-      this.dataSource = new MatTableDataSource(this.userList);
-      this.infoMessage = "User is added successfully !";
+      //let itemIndex = this.userList.findIndex(item => item.id == this.selectedUser.id);
+      //this.userList[itemIndex] = this.selectedUser;
+      //this.dataSource = new MatTableDataSource(this.userList);
+      this.infoMessage = "L'utilisateur est ajouté avec succès !";
       $("#createuserModal").modal('hide');
       setTimeout(() => {
         window.location.reload();
       },2000 );
     },err => {
-        this.errorMessage = "Username is already exist !";
+        this.errorMessage = "L'utilisateur ajouté existe déjà !";
         $("#createuserModal").modal('hide');
     });
   }
@@ -104,10 +109,10 @@ export class UserListComponent implements OnInit {
         this.userList.splice(itemIndex, 1);
       }
       this.dataSource = new MatTableDataSource(this.userList);
-      this.infoMessage = "User deleted successfully !";
+      this.infoMessage = "Utilisateur supprimé avec succès !";
       $("#deleteModal").modal('hide');
     },err => {
-      this.errorMessage = "Unexpected error occurred !";
+      this.errorMessage = "Une erreur inattendue s'est produite !";
     });
   }
 

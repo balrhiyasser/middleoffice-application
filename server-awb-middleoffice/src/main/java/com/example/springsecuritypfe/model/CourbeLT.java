@@ -24,7 +24,7 @@ public class CourbeLT {
 	    private String dateCourbe;
 	    
 	    @Column(name="maturite")
-	    private Long maturite;
+	    private Integer maturite;
 
 	    @Column(name="taux")
 	    private Double taux;

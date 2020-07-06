@@ -15,8 +15,10 @@ public interface CourbeBDTService {
     
     List<CourbeBDT> findByDate(String date);
     
-    List<CourbeBDT> findByMaturite(Long Maturite) ;
-    
+    List<CourbeBDT> findOnlyByDate(String date);
+
+    List<CourbeBDT> findByMaturite(Integer Maturite) ;
+        
     List<CourbeBDT> generateBDT(List<CourbeBDT> list) throws ParseException;
     
      

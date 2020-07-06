@@ -15,11 +15,11 @@
             <form class="form-inline" style="margin-right: 20px;">
               <div class="form-group mx-sm-3">
                 <input type="date" class="form-control" name="date" [ngModel]="BirthDate | date:'yyyy-MM-dd'" #date>
-                <button mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-success" (click)="getcoursList(date.value)">Rechercher</button>
-                <button mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-success" (click)="generateBBE(date.value)">Générer</button>
-                <div style=" margin-left: 20px;" class="dropdown">
+                <button mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-warning" (click)="getcoursList(date.value)">Rechercher</button>
+                <button *ngIf="showgenerate" mat-raised-button style=" margin-left: 20px;" type="submit" class="btn btn-warning" (click)="generateBBE(date.value)">Générer</button>
+                <div *ngIf="mode" style=" margin-left: 20px;" class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Télécharger
+                    Extraire
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" (click)="DownloadEXFile(date.value)">EXCEL</a>
@@ -30,13 +30,6 @@
 
                   </div>
                 </div>
-
-                <!--
-                <button mat-raised-button *ngIf="isViewable" style="margin-right: 20px; background-color: chocolate;" class="btn btn-primary" (click)="exporttoEXCEL()"><span class="glyphicon glyphicon-save"></span> EXCEL</button>
-                <button mat-raised-button *ngIf="isViewable" style="margin-right: 20px; background-color: chocolate;" class="btn btn-primary" (click)="exporttoCSV()">CSV</button>
-                <button mat-raised-button *ngIf="isViewable" style="margin-right: 20px; background-color: chocolate;" class="btn btn-primary" (click)="exporttoTXTBAM()">TXT BAM</button>
-                <button mat-raised-button *ngIf="isViewable" style="margin-right: 20px; background-color: chocolate;" class="btn btn-primary" (click)="exporttoTXTWAFA()">TXT WAFA</button>
-                -->
               </div>
               
             </form>
@@ -45,27 +38,12 @@
     
         <div class="card-body">
 
-       <!--<mat-form-field>
-            <input (keyup)="applyFilter($event.target.value)" matInput placeholder="Recherche">
-           
-          </mat-form-field>
-          <mat-form-field>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="glyphicon glyphicon-search" id="basic-addon1"></span>
-            </div>
-            <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-          </div>
-          </mat-form-field>-->
-
-          <mat-form-field *ngIf="isViewable">
-            <mat-label>Recherche</mat-label>
+          <mat-form-field appearance="outline" color="warn" *ngIf="isViewable">
+            <mat-label>Filter</mat-label>
             <input (keyup)="applyFilter($event.target.value)" matInput >
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
 
-          
-          
           <mat-table [dataSource]="dataSource" matSort>
 
             <ng-container matColumnDef="achatClientele">

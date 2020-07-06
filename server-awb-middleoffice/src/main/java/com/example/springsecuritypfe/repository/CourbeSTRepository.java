@@ -10,7 +10,7 @@ public interface CourbeSTRepository extends JpaRepository<CourbeST, Long>  {
 	
 	List<CourbeST> findByDateCourbe(String dateCourbe);
 	
-	List<CourbeST> findByMaturite(Long maturite);
+	List<CourbeST> findByMaturite(Integer maturite);
 
 	List<CourbeST> save(List<CourbeST> listcourbebdt);
 

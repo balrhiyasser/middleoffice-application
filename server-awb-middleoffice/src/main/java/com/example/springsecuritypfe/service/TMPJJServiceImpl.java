@@ -22,6 +22,9 @@ public class TMPJJServiceImpl implements TMPJJService {
 	
 	@Autowired
 	private TMPJJService courbetmpjjService;
+	
+	@Autowired
+	private ParameterService parameterService;
 
 	@Override
 	public TauxMPJJ saveTaux(TauxMPJJ taux) {
@@ -55,31 +58,27 @@ public class TMPJJServiceImpl implements TMPJJService {
 
 	@Override
 	public String getTMP(String date) {
-		
+
 		String dateformatted = date.substring(8,10)+"/"+date.substring(5,7)+"/"+date.substring(0,4) ;
-		
-		final String url = "http://www.bkam.ma/Marches/Principaux-indicateurs/Marche-monetaire/Marche-monetaire-interbancaire";
-		
+				
         String taux = "" ;
         
         try {
 
-            final Document document = Jsoup.connect(url).proxy(null).get();
+            final Document document = Jsoup.connect(parameterService.findByCle("URL_SCRAPPING").getValeur()).proxy(null).get();
             
-            for (Element row : document.select("table.dynamic_contents_ref_5 tr")) {
+            for (Element row : document.select(parameterService.findByCle("identifiant_table").getValeur())) {
             	
-            	if(row.select("td:nth-of-type(1)").text().equals(dateformatted)) {	
-            		taux = taux+row.select("td:nth-of-type(2)").text().substring(0,5);
+            	if(row.select(parameterService.findByCle("identifiant_champ_date").getValeur()).text().equals(dateformatted)) {	
+            		taux = taux+row.select(parameterService.findByCle("identifiant_champ_taux").getValeur()).text().substring(0,5);
             		System.out.println(taux);
             		break;
             	}
             }
         }
             
-        catch (Exception ex) {
-        	
-        	ex.printStackTrace();
-        	
+        catch (Exception ex) {	
+        	ex.printStackTrace();	
         }
         
         log.info("Taux moyen pondéré récupéré pour le jour : "+dateformatted+" est : "+ taux);

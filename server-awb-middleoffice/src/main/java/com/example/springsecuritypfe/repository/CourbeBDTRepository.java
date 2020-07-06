@@ -10,7 +10,7 @@ public interface CourbeBDTRepository extends JpaRepository<CourbeBDT, Long>  {
 	
 	List<CourbeBDT> findByDateCourbe(String dateCourbe);
 	
-	List<CourbeBDT> findByMaturite(Long maturite);
+	List<CourbeBDT> findByMaturite(Integer maturite);
 
 	List<CourbeBDT> save(List<CourbeBDT> listcourbebdt);
 
